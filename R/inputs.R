@@ -75,3 +75,26 @@ button_386 <- function(inputId, label, status = NULL, icon = NULL, width = NULL,
 #'
 #' }
 text_input_386 <- shiny::textInput
+
+
+
+#' Create a Bootstrap 386 text area input
+#' @inheritParams shiny::textAreaInput
+#' @export
+#' @examples
+#' if (interactive()) {
+#'  library(shiny)
+#'  library(shiny386)
+#'
+#'  ui <- page_386(
+#'   textAreaInput("caption", "Caption", "Data Summary"),
+#'   verbatimTextOutput("value")
+#'  )
+#'
+#'  server <- function(input, output, session) {
+#'   output$value <- renderText({ input$caption })
+#'  }
+#'  shinyApp(ui, server)
+#'
+#' }
+text_area_input_386 <- shiny::textAreaInput
