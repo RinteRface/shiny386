@@ -9,7 +9,10 @@ bs4_deps <- htmltools::htmlDependency(
     "js/progress_handler.js",
     "js/toast_handler.js"
   ),
-  stylesheet = "css/bootstrap.min.css"
+  stylesheet = c(
+    "css/bootstrap.min.css",
+    "css/custom.css"
+  )
 )
 
 
