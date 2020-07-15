@@ -1,3 +1,7 @@
 pre {
   color: #fff;
 }
+
+.shiny-file-input-progress > .progress-bar {
+  color: black;
+}
