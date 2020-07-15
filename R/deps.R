@@ -6,7 +6,8 @@ bs4_deps <- htmltools::htmlDependency(
   script = c(
     "js/bootstrap.bundle.js",
     "js/custom.js",
-    "js/progress_handler.js"
+    "js/progress_handler.js",
+    "js/toast_handler.js"
   ),
   stylesheet = "css/bootstrap.min.css"
 )
