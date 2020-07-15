@@ -15,3 +15,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1.9000
 URL: https://github.com/RinteRface/shiny386
 BugReports: https://github.com/RinteRface/shiny386/issues
+Imports: 
+    shiny,
+    htmltools
