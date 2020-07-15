@@ -1,6 +1,8 @@
 #' Create Bootstrap 386 page skeleton
 #'
 #' @param ... Slot for shiny386 layout elements.
+#' @param title The browser window title (defaults to the host URL of the page).
+#' Can also be set as a side effect of the titlePanel() function.
 #'
 #' @return A list of tags
 #' @export
@@ -10,7 +12,7 @@
 #'  library(shiny)
 #'  library(shiny386)
 #' }
-page_386 <- function(...) {
+page_386 <- function(..., title = NULL) {
   shiny::tagList(
     # Head
     shiny::tags$head(

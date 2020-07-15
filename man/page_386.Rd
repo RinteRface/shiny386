@@ -4,10 +4,13 @@
 \alias{page_386}
 \title{Create Bootstrap 386 page skeleton}
 \usage{
-page_386(...)
+page_386(..., title = NULL)
 }
 \arguments{
 \item{...}{Slot for shiny386 layout elements.}
+
+\item{title}{The browser window title (defaults to the host URL of the page).
+Can also be set as a side effect of the titlePanel() function.}
 }
 \value{
 A list of tags
