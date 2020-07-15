@@ -33,6 +33,6 @@ page_386 <- function(...) {
         ...
       ),
       shiny::div(class = "bootstra-cursor", style = "left: 424px; top: 504px;")
-    ) %>% add_bs4_deps()
+    ) %>% use_bs4_deps()
   )
 }
