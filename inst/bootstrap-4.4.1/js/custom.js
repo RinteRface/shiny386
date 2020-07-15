@@ -1,6 +1,6 @@
 (function(){
-  _386.magicCursor();
-  _386.scrollLock();
+  //_386.magicCursor();
+  //_386.scrollLock();
   $('[data-toggle="tooltip"]').tooltip();
   $('[data-toggle="popover"]').popover();
 

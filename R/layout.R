@@ -28,13 +28,11 @@ page_386 <- function(..., title = NULL) {
     ),
     # body
     shiny::tags$body(
-      class = "bootstra-enable-cursor",
       shiny::div(
         class = "container",
-        style = "background:url('dist/fonts/grid.svg')",
         ...
-      ),
-      shiny::div(class = "bootstra-cursor", style = "left: 424px; top: 504px;")
+      )
+      #shiny::div(class = "bootstra-cursor", style = "left: 424px; top: 504px;")
     ) %>% use_bs4_deps()
   )
 }

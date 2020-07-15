@@ -3,7 +3,7 @@ bs4_deps <- htmltools::htmlDependency(
   version = "4.4.1",
   src = c(file = "bootstrap-4.4.1"),
   package = "shiny386",
-  script = c("js/bootstrap.bundle.min.js", "js/custom.js"),
+  script = c("js/bootstrap.bundle.js", "js/custom.js"),
   stylesheet = "css/bootstrap.min.css"
 )
 
