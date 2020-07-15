@@ -15,7 +15,7 @@
 #'   jumbotron_386(
 #'    title = "Jumbotron 386",
 #'    p("Hello World"),
-#'    button_386("btn", "More", class = "btn-lg")
+#'    button_386("btn", "More", class = "btn-lg btn-block")
 #'   )
 #'  )
 #'
