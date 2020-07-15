@@ -244,3 +244,89 @@ badge_386 <- function (..., status, rounded = FALSE) {
     ...
   )
 }
+
+
+
+#' Create a Bootstrap 386 card
+#'
+#' @param ... Card content.
+#' @param title Card title.
+#' @param status Card background status.
+#' @param footer Card footer.
+#'
+#' @return A shiny tag
+#' @export
+#' @rdname card
+#' @examples
+#' if (interactive()) {
+#'  library(shiny)
+#'  library(shiny386)
+#'  ui <- page_386(
+#'   card_386(
+#'    title = "My card",
+#'    "This is my card",
+#'    br(),
+#'    card_link_386(href = "https://www.google.com", "More"),
+#'    footer = "Card footer"
+#'   )
+#'  )
+#'
+#'  server <- function(input, output, session) {}
+#'  shinyApp(ui, server)
+#' }
+card_386 <- function(..., title = NULL, status = NULL, footer = NULL) {
+
+  if (!is.null(status)) validate_status(status)
+
+  card_cl <- paste0(
+    "card mb-3",
+    if (!is.null(status)) paste0(" bg-", status)
+  )
+
+
+  shiny::tags$div(
+    class = card_cl,
+    if (!is.null(title)) shiny::tags$div(class = "card-header", title),
+    shiny::tags$div(class = "card-body", ...),
+    if (!is.null(footer)) shiny::tags$div(class = "card-footer text-muted", footer)
+  )
+}
+
+
+
+#' Create a Bootstrap 4 card title element
+#'
+#' @param title Title text.
+#'
+#' @return A shiny tag.
+#' @export
+#'
+#' @rdname card
+card_title_386 <- function(title) {
+  shiny::h4(class = "card-title", title)
+}
+
+
+#' Create a Bootstrap 386 card subtitle element
+#'
+#' @param subtitle Card subtitle.
+#'
+#' @return A shiny tag.
+#' @export
+#' @rdname card
+card_subtitle_386 <- function(subtitle) {
+  shiny::h6(class = "card-subtitle text-muted", subtitle)
+}
+
+
+#' Create a Bootstrap 386 card link element
+#'
+#' @param href Target url.
+#' @param label Link text.
+#'
+#' @return A shiny tag.
+#' @export
+#' @rdname card
+card_link_386 <- function(href, label) {
+  shiny::a(href = href, class = "card-link", label)
+}
