@@ -6,12 +6,6 @@
 #'
 #' @return A list of tags
 #' @export
-#'
-#' @examples
-#' if (interactive()) {
-#'  library(shiny)
-#'  library(shiny386)
-#' }
 page_386 <- function(..., title = NULL) {
   shiny::tagList(
     # Head

@@ -18,9 +18,3 @@ A list of tags
 \description{
 Create Bootstrap 386 page skeleton
 }
-\examples{
-if (interactive()) {
- library(shiny)
- library(shiny386)
-}
-}

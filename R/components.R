@@ -206,3 +206,41 @@ show_toast_386 <- function(id, options = NULL, session = getDefaultReactiveDomai
   )
   session$sendCustomMessage(type = "tabler-toast", message)
 }
+
+
+
+#' Create a Bootstrap 386 badge
+#'
+#' @param ... Text.
+#' @param status Badge status.
+#' @param rounded Rounded style. Default to FALSE.
+#'
+#' @return A shiny tags
+#' @export
+#'
+#' @examples
+#' if (interactive()) {
+#'  library(shiny)
+#'  library(shiny386)
+#'  ui <- page_386(
+#'   badge_386(status = "danger", "1"),
+#'   badge_386(status = "info", "2"),
+#'   badge_386(status = "success", "3", rounded = TRUE)
+#'  )
+#'
+#'  server <- function(input, output, session) {}
+#'  shinyApp(ui, server)
+#' }
+badge_386 <- function (..., status, rounded = FALSE) {
+
+  validate_status(status)
+
+  shiny::tags$span(
+    class = paste0(
+      "badge",
+      if (rounded) " badge-pill",
+      " badge-", status
+    ),
+    ...
+  )
+}
