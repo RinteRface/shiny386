@@ -55,6 +55,117 @@ button_386 <- function(inputId, label, status = NULL, icon = NULL, width = NULL,
 }
 
 
+
+#' Create a Bootstrap 386 dropdown container for buttons/links
+#'
+#' @param ... Slot for \link{dropdown_item_386}.
+#' @param inputId Unique input id.
+#' @param label Dropdown label.
+#' @param status Button status.
+#' @param open Whether to open the dropdown at start. Default to FALSE.
+#'
+#' @return A shiny tag
+#' @export
+#' @rdname dropdown
+#' @examples
+#' if (interactive()) {
+#'  library(shiny)
+#'  library(shiny386)
+#'
+#'  ui <- page_386(
+#'    dropdown_386(
+#'      inputId = "plop",
+#'      label = "Menu",
+#'      status = "danger",
+#'      open = FALSE,
+#'      dropdown_item_386(inputId = "btn1", label = "button 1"),
+#'      dropdown_item_386(href = "https://www.google.com/", label = "More")
+#'    )
+#'  )
+#'
+#'  server <- function(input, output, session) {
+#'    observe(print(input$btn1))
+#'  }
+#'  shinyApp(ui, server)
+#' }
+dropdown_386 <- function(..., inputId = NULL, label, status = NULL, open = FALSE) {
+
+  if (!is.null(status)) validate_status(status)
+
+  tags$div(
+    class = "btn-group",
+    role = "group",
+    `aria-label` = "Button group with nested dropdown",
+    tags$button(
+      type = "button",
+      `data-toggle` = "dropdown",
+      class = if (!is.null(status)) sprintf("btn btn-%s", status) else NULL,
+      label
+    ),
+    tags$div(
+      class = if (open) "btn-group show" else "btn-group",
+      role = "group",
+      tags$button(
+        id = inputId,
+        type = "button",
+        class = if (!is.null(status)) {
+          sprintf("btn btn-%s dropdown-toggle", status)
+        } else {
+          "btn dropdown-toggle"
+        },
+        `data-toggle` = "dropdown",
+        `aria-haspopup` = "true",
+        `aria-expanded` = if (open) "true" else "false"
+      ),
+      tags$div(
+        class = if (open) "dropdown-menu show" else "dropdown-menu",
+        `aria-labelledby` = inputId,
+        style = "
+          position: absolute;
+          transform: translate3d(0px, 14px, 0px);
+          top: 0px;
+          left: 0px;
+          will-change: transform;
+        ",
+        `x-placement` = "bottom-start",
+        ...
+      )
+    )
+  )
+}
+
+
+
+#' Create a Bootstrap 386 dropdown item
+#'
+#' Can be a simple link or an action button
+#'
+#' @param inputId If action button.
+#' @param href If simple link.
+#' @param label Button label.
+#'
+#' @return A shiny tag
+#' @export
+#' @rdname dropdown
+dropdown_item_386 <- function(inputId = NULL, href = NULL, label) {
+
+  if (!is.null(inputId) && !is.null(href)) {
+    stop("Choose either inputId or href.")
+  }
+
+  tags$a(
+    id = inputId,
+    class = if (!is.null(inputId)) {
+      "dropdown-item action-button"
+    } else {
+      "dropdown-item"
+    },
+    href = if (!is.null(href)) href else "#",
+    label
+  )
+}
+
+
 #' Create a Bootstrap 386 text input
 #' @inheritParams shiny::textInput
 #' @export
