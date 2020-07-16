@@ -54,6 +54,15 @@ shinyInputLabel <- function(inputId, label = NULL) {
   )
 }
 
+anyNamed <- function (x) {
+  if (length(x) == 0)
+    return(FALSE)
+  nms <- names(x)
+  if (is.null(nms))
+    return(FALSE)
+  any(nzchar(nms))
+}
+
 # This function takes in either a list or vector for `choices` (and
 # `choiceNames` and `choiceValues` are passed in as NULL) OR it takes
 # in a list or vector for both `choiceNames` and `choiceValues` (and

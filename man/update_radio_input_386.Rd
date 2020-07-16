@@ -15,6 +15,8 @@ update_radio_input_386(
 )
 }
 \arguments{
+\item{session}{The session object passed to function given to shinyServer.}
+
 \item{inputId}{The \code{input} slot that will be used to access the value.}
 
 \item{label}{Display label for the control, or \code{NULL} for no label.}

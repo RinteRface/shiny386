@@ -282,6 +282,7 @@ radio_input_386 <- function(inputId, label, choices = NULL, selected = NULL,
 #' Change the value of a radio input on the client
 #'
 #' @inheritParams radio_input_386
+#' @param session The session object passed to function given to shinyServer.
 #'
 #' @seealso [radio_input_386()]
 #'
