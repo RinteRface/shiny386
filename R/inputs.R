@@ -332,3 +332,70 @@ update_radio_input_386 <- function(session, inputId, label = NULL, choices = NUL
     choiceValues
   )
 }
+
+
+
+#' Create a Bootstrap 386 select input
+#' @inheritParams shiny::selectInput
+#' @export
+#' @examples
+#' if (interactive()) {
+#'  library(shiny)
+#'  library(shiny386)
+#'
+#'  ui <- page_386(
+#'   select_input_386("variable", "Variable:",
+#'    c("Cylinders" = "cyl",
+#'      "Transmission" = "am",
+#'      "Gears" = "gear")),
+#'    tableOutput("data")
+#'  )
+#'
+#'  server <- function(input, output, session) {
+#'   output$data <- renderTable({
+#'    mtcars[, c("mpg", input$variable), drop = FALSE]
+#'   }, rownames = TRUE)
+#'  }
+#'  shinyApp(ui, server)
+#'
+#' }
+select_input_386 <- shiny::selectInput
+
+
+
+#' Update a Bootstrap 386 select input on the client
+#' @inheritParams shiny::updateSelectInput
+#' @export
+#' @examples
+#' if (interactive()) {
+#'  library(shiny)
+#'  library(shiny386)
+#'
+#'  ui <- page_386(
+#'   p("The radio group controls the select input"),
+#'   radio_input_386("inCheckboxGroup", "Input checkbox",
+#'                      c("Item A", "Item B", "Item C")),
+#'   select_input_386("inSelect", "Select input",
+#'              c("Item A", "Item B", "Item C"))
+#'  )
+#'
+#'  server <- function(input, output, session) {
+#'    observe({
+#'      x <- input$inCheckboxGroup
+#'
+#'      # Can use character(0) to remove all choices
+#'      if (is.null(x))
+#'        x <- character(0)
+#'
+#'      # Can also set the label and select items
+#'      update_select_input_386(session, "inSelect",
+#'                        label = paste("Select input label", length(x)),
+#'                        choices = x,
+#'                        selected = tail(x, 1)
+#'      )
+#'    })
+#'  }
+#'
+#'  shinyApp(ui, server)
+#' }
+update_select_input_386 <- shiny::updateSelectInput
