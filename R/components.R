@@ -103,111 +103,6 @@ update_progress_386 <- function(id, value, session = shiny::getDefaultReactiveDo
 
 
 
-#' Create a Bootstrap 386 toast
-#'
-#' Display user feedback
-#'
-#' @param id Unique toast id.
-#' @param title Toast title.
-#' @param subtitle Toast subtitle.
-#' @param ... Toast content.
-#' @param img Toast image.
-#'
-#' @return A toast
-#' @export
-#' @seealso \link{show_toast_386}
-toast_386 <- function(id, title = NULL, subtitle = NULL, ..., img = NULL) {
-
-  toast_header <- div(
-    class = "toast-header",
-    if (!is.null(img)) {
-      span(
-        class = "avatar mr-2",
-        style = sprintf("background-image: url(%s)", img)
-      )
-    },
-    if (!is.null(title)) strong(class = "mr-2", title),
-    if (!is.null(subtitle)) tags$small(subtitle)
-  )
-
-  toast_body <- div(class = "toast-body", ...)
-
-  toast_wrapper <- div(
-    id = id,
-    class = "toast",
-    role = "alert",
-    style = "position: absolute; top: 0; right: 0;",
-    `aria-live` = "assertive",
-    `aria-atomic` = "true",
-    `data-toggle` = "toast"
-  )
-
-  toast_wrapper %>% tagAppendChildren(toast_header, toast_body)
-}
-
-
-
-
-#' Show a Bootstrap 386 toast on the client
-#'
-#' @param id Toast id.
-#' @param options Toast options: see \url{https://getbootstrap.com/docs/4.3/components/toasts/}.
-#' @param session Shiny session
-#' @export
-#'
-#' @examples
-#' if (interactive()) {
-#'  library(shiny)
-#'  library(shiny386)
-#'
-#'  ui <- page_386(
-#'   toast_386(
-#'     id = "toast",
-#'     title = "Hello",
-#'     subtitle = "now",
-#'     "Toast body",
-#'     img = "https://preview-dev.tabler.io/static/logo.svg"
-#'   ),
-#'   button_386("launch", "Go!", class = "btn-lg")
-#'  )
-#'
-#'  server <- function(input, output, session) {
-#'    observe(print(input$toast))
-#'    observeEvent(input$launch, {
-#'      removeNotification("notif")
-#'      show_toast_386(
-#'        "toast",
-#'        options = list(
-#'          animation = FALSE,
-#'          delay = 3000
-#'        )
-#'      )
-#'    })
-#'
-#'    observeEvent(input$toast, {
-#'      showNotification(
-#'        id = "notif",
-#'        "Toast was closed",
-#'        type = "warning",
-#'        duration = 1,
-#'
-#'      )
-#'    })
-#'  }
-#'
-#'  shinyApp(ui, server)
-#' }
-show_toast_386 <- function(id, options = NULL, session = getDefaultReactiveDomain()) {
-  message <- dropNulls(
-    list(
-      id = id,
-      options = options
-    )
-  )
-  session$sendCustomMessage(type = "tabler-toast", message)
-}
-
-
 
 #' Create a Bootstrap 386 badge
 #'
@@ -332,85 +227,163 @@ card_link_386 <- function(href, label) {
 }
 
 
-#' Create a Bootstrap 386 modal
-#' @inheritParams shiny::modalDialog
-#' @export
-#' @rdname modal
+
+#' Create a Bootstrap 386 list group container
+#'
+#' @param ... Slot for \link{list_group_item_386}.
+#' @param width List group width. 4 by default. Between 1 and 12.
+#'
+#' @author David Granjon, \email{dgranjon@@ymail.com}
+#'
 #' @examples
-#' if (interactive()) {
+#' if(interactive()){
 #'  library(shiny)
 #'  library(shiny386)
 #'
 #'  shinyApp(
-#'   ui = page_386(
-#'     button_386("show", "Show modal dialog"),
-#'     verbatimTextOutput("dataInfo")
-#'   ),
-#'
-#'   server = function(input, output) {
-#'     # reactiveValues object for storing current data set.
-#'     vals <- reactiveValues(data = NULL)
-#'
-#'    # Return the UI for a modal dialog with data selection input. If 'failed' is
-#'    # TRUE, then display a message that the previous value was invalid.
-#'    dataModal <- function(failed = FALSE) {
-#'      modal_386(
-#'        textInput("dataset", "Choose data set",
-#'                  placeholder = 'Try "mtcars" or "abc"'
+#'    ui = page_386(
+#'       fluidRow(
+#'        list_group_386(
+#'        list_group_item_386(
+#'         type = "basic",
+#'         "Cras justo odio"
 #'        ),
-#'        span('(Try the name of a valid data object like "mtcars", ',
-#'             'then a name of a non-existent object like "abc")'),
-#'        if (failed)
-#'          div(tags$b("Invalid name of data object", style = "color: red;")),
-#'
-#'        footer = tagList(
-#'          modalButton("Cancel"),
-#'          button_386("ok", "OK")
+#'        list_group_item_386(
+#'         type = "basic",
+#'         "Dapibus ac facilisis in"
+#'        ),
+#'        list_group_item_386(
+#'         type = "basic",
+#'         "Morbi leo risus"
 #'        )
+#'       ),
+#'       list_group_386(
+#'        list_group_item_386(
+#'         "Cras justo odio",
+#'         active = TRUE,
+#'         disabled = FALSE,
+#'         type = "action",
+#'         src = "http://www.google.fr"
+#'        ),
+#'        list_group_item_386(
+#'         active = FALSE,
+#'         disabled = FALSE,
+#'         type = "action",
+#'         "Dapibus ac facilisis in",
+#'         src = "http://www.google.fr"
+#'        ),
+#'        list_group_item_386(
+#'         "Morbi leo risus",
+#'         active = FALSE,
+#'         disabled = TRUE,
+#'         type = "action",
+#'         src = "http://www.google.fr"
+#'        )
+#'       ),
+#'       list_group_386(
+#'        list_group_item_386(
+#'         "Donec id elit non mi porta gravida at eget metus.
+#'         Maecenas sed diam eget risus varius blandit.",
+#'         active = TRUE,
+#'         disabled = FALSE,
+#'         type = "heading",
+#'         title = "List group item heading",
+#'         subtitle = "3 days ago",
+#'         footer = "Donec id elit non mi porta."
+#'        ),
+#'        list_group_item_386(
+#'         "Donec id elit non mi porta gravida at eget metus.
+#'         Maecenas sed diam eget risus varius blandit.",
+#'         active = FALSE,
+#'         disabled = FALSE,
+#'         type = "heading",
+#'         title = "List group item heading",
+#'         subtitle = "3 days ago",
+#'         footer = "Donec id elit non mi porta."
+#'        )
+#'       )
 #'      )
-#'    }
-#'
-#'    # Show modal when button is clicked.
-#'    observeEvent(input$show, {
-#'      show_modal_386(dataModal())
-#'    })
-#'
-#'    # When OK button is pressed, attempt to load the data set. If successful,
-#'    # remove the modal. If not show another modal, but this time with a failure
-#'    # message.
-#'    observeEvent(input$ok, {
-#'      # Check that data object exists and is data frame.
-#'      if (!is.null(input$dataset) && nzchar(input$dataset) &&
-#'          exists(input$dataset) && is.data.frame(get(input$dataset))) {
-#'        vals$data <- get(input$dataset)
-#'        remove_modal_386()
-#'      } else {
-#'        show_modal_386(dataModal(failed = TRUE))
-#'      }
-#'    })
-#'
-#'    # Display information about selected data
-#'    output$dataInfo <- renderPrint({
-#'      if (is.null(vals$data))
-#'        "No data selected"
-#'      else
-#'        summary(vals$data)
-#'    })
-#'   }
+#'    ),
+#'    server = function(input, output) {}
 #'  )
 #' }
-modal_386 <- shiny::modalDialog
-
-#' Show a Bootstrap 386 modal
-#' @inheritParams shiny::showModal
+#'
 #' @export
-#' @rdname modal
-show_modal_386 <- shiny::showModal
+list_group_386 <- function (..., width = 4) {
+  listGroupTag <- tags$ul(
+    class = "list-group",
+    ...
+  )
+
+  tags$div(
+    class = if (!is.null(width)) paste0("col-sm-", width),
+    listGroupTag
+  )
+}
 
 
 
-#' Hide a Bootstrap 386 modal
-#' @inheritParams shiny::removeModal
+#' Create a Bootstrap 386 list group item
+#'
+#' @param ... Item content.
+#' @param active Whether the item is active or not. FALSE by default.
+#' Only if type is "action" or "heading".
+#' @param disabled Whether the item is disabled or not. FALSE by default.
+#' Only if type is "action" or "heading".
+#' @param type Item type. Choose between "basic", "action" and "heading".
+#' @param src Item external link.
+#' @param title Item title (only if type is "heading").
+#' @param subtitle Item subtitle (only if type is "heading").
+#' @param footer Item footer content (only if type is "heading").
+#'
+#' @author David Granjon, \email{dgranjon@@ymail.com}
+#'
 #' @export
-#' @rdname modal
-remove_modal_386 <- shiny::removeModal
+list_group_item_386 <- function(..., active = FALSE, disabled = FALSE,
+                             type = c("basic", "action", "heading"),
+                             src = "#", title = NULL, subtitle = NULL,
+                             footer = NULL) {
+
+  if (isTRUE(active) && isTRUE(disabled)) {
+    stop("active and disabled cannot be TRUE at the same time!")
+  }
+  type <- match.arg(type)
+
+  itemCl <- switch(
+    type,
+    "basic" = "list-group-item d-flex justify-content-between align-items-center",
+    "action" = "list-group-item list-group-item-action",
+    "heading" = "list-group-item list-group-item-action flex-column align-items-start"
+  )
+  if (isTRUE(active)) itemCl <- paste0(itemCl, " active")
+  if (isTRUE(disabled)) itemCl <- paste0(itemCl, " disabled")
+
+
+  # item tag
+  if (type == "basic") {
+    tags$li(
+      class = itemCl,
+      ...
+    )
+  } else if (type == "action") {
+    tags$a(
+      class = itemCl,
+      href = src,
+      target = "_blank",
+      ...
+    )
+  } else {
+    tags$a(
+      class = itemCl,
+      href = src,
+      target = "_blank",
+      tags$div(
+        class = "d-flex w-100 justify-content-between",
+        tags$h5(class = "mb-1", title),
+        tags$small(subtitle)
+      ),
+      tags$p(class = "mb-1", ...),
+      tags$small(class = if (isTRUE(active)) NULL else "text-muted", footer)
+    )
+  }
+}
