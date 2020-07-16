@@ -127,29 +127,7 @@ text_area_input_386 <- shiny::textAreaInput
 #'  shinyApp(ui, server)
 #' }
 toggle_input_386 <- function(inputId, label, value = FALSE, width = NULL) {
-
-  value <- restoreInput(id = inputId, default = value)
-  input_tag <- tags$input(
-    id = inputId,
-    type = "checkbox",
-    class = "custom-control-input"
-  )
-
-  if (!is.null(value) && value) {
-    input_tag <- input_tag %>% tagAppendAttributes(checked = "checked")
-  }
-
-  input_wrapper <- tags$div(
-    class = "custom-control custom-switch",
-    style = if (!is.null(width)) {
-      paste0("width: ", validateCssUnit(width), ";")
-    }
-  )
-
-  input_wrapper %>% tagAppendChildren(
-    input_tag,
-    tags$label(class = "custom-control-label", `for` = inputId, label)
-  )
+  create_checkbox_tag(inputId, label, value = FALSE, width = NULL, type = "switch")
 }
 
 
@@ -186,3 +164,57 @@ update_toggle_input_386 <- function (session, inputId, label = NULL, value = NUL
   message <- dropNulls(list(label = label, value = value))
   session$sendInputMessage(inputId, message)
 }
+
+
+#' Create a Bootstrap 386 checkbox
+#'
+#' @inheritParams shiny::checkboxInput
+#' @export
+#' @examples
+#' if (interactive()) {
+#'  library(shiny)
+#'  library(shiny386)
+#'
+#'  ui <- page_386(
+#'   checkbox_input_386("check", "Check me", TRUE),
+#'   verbatimTextOutput("val")
+#'  )
+#'
+#'  server <- function(input, output, session) {
+#'    output$val <- renderPrint(input$check)
+#'  }
+#'  shinyApp(ui, server)
+#' }
+checkbox_input_386 <- function(inputId, label, value = FALSE, width = NULL) {
+  create_checkbox_tag(inputId, label, value = FALSE, width = NULL, type = "checkbox")
+}
+
+
+#' Update \link{checkbox_input_386} on the client
+#'
+#' @inheritParams shiny::updateCheckboxInput
+#' @export
+#' @examples
+#' if (interactive()) {
+#'  library(shiny)
+#'  library(shiny386)
+#'
+#'  ui <- page_386(
+#'   button_386("update", "Go!", class = "btn-lg"),
+#'   checkbox_input_386("check", "Checked", value = TRUE)
+#'  )
+#'
+#'  server <- function(input, output, session) {
+#'    observe(print(input$check))
+#'    observeEvent(input$update, {
+#'      update_checkbox_input_386(
+#'        session,
+#'        "toggle",
+#'        value = !input$check
+#'      )
+#'    })
+#'  }
+#'
+#'  shinyApp(ui, server)
+#' }
+update_checkbox_input_386 <- update_toggle_input_386
