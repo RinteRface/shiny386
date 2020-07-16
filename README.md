@@ -22,8 +22,8 @@ remotes::install_github("RinteRface/shiny386")
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
-library(shiny386)
 library(shiny)
+library(shiny386)
 ui <- page_386(
  card_386(
   title = "My card",
