@@ -8,7 +8,8 @@ bs4_deps <- htmltools::htmlDependency(
     "js/custom.js",
     "js/progress_handler.js",
     "js/toast_handler.js",
-    "js/radioButtonsBinding.js"
+    "js/radioButtonsBinding.js",
+    "js/tabsetPanelBinding.js"
   ),
   stylesheet = c(
     "css/bootstrap.min.css",
