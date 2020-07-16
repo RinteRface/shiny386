@@ -151,3 +151,38 @@ toggle_input_386 <- function(inputId, label, value = FALSE, width = NULL) {
     tags$label(class = "custom-control-label", `for` = inputId, label)
   )
 }
+
+
+
+#' Update \link{toggle_input_386} on the client
+#'
+#' @inheritParams shiny::updateCheckboxInput
+#' @export
+#'
+#' @examples
+#' if (interactive()) {
+#'  library(shiny)
+#'  library(shiny386)
+#'
+#'  ui <- page_386(
+#'   button_386("update", "Go!", class = "btn-lg"),
+#'   toggle_input_386("toggle", "Switch", value = TRUE)
+#'  )
+#'
+#'  server <- function(input, output, session) {
+#'    observe(print(input$toggle))
+#'    observeEvent(input$update, {
+#'      update_toggle_input_386(
+#'        session,
+#'        "toggle",
+#'        value = !input$toggle
+#'      )
+#'    })
+#'  }
+#'
+#'  shinyApp(ui, server)
+#' }
+update_toggle_input_386 <- function (session, inputId, label = NULL, value = NULL) {
+  message <- dropNulls(list(label = label, value = value))
+  session$sendInputMessage(inputId, message)
+}
