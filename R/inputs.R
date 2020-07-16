@@ -78,6 +78,12 @@ text_input_386 <- shiny::textInput
 
 
 
+#' Update a Bootstrap 386 text input on the client
+#' @inheritParams shiny::updateTextInput
+#' @export
+update_text_input_386 <- shiny::updateTextInput
+
+
 #' Create a Bootstrap 386 text area input
 #' @inheritParams shiny::textAreaInput
 #' @export
@@ -99,6 +105,13 @@ text_input_386 <- shiny::textInput
 #' }
 text_area_input_386 <- shiny::textAreaInput
 
+
+
+
+#' Update a Bootstrap 386 text area input on the client
+#' @inheritParams shiny::updateTextAreaInput
+#' @export
+update_text_area_input_386 <- shiny::updateTextAreaInput
 
 
 
