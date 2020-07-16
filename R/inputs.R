@@ -218,3 +218,117 @@ checkbox_input_386 <- function(inputId, label, value = FALSE, width = NULL) {
 #'  shinyApp(ui, server)
 #' }
 update_checkbox_input_386 <- update_toggle_input_386
+
+
+#' Create a Bootstrap 386 radio buttons
+#'
+#' @inheritParams shiny::radioButtons
+#' @export
+#' @examples
+#' if (interactive()) {
+#'  library(shiny)
+#'  library(shiny386)
+#'
+#'  ui <- page_386(
+#'   radio_input_386("dist", "Distribution type:",
+#'                   c("Normal" = "norm",
+#'                     "Uniform" = "unif",
+#'                     "Log-normal" = "lnorm",
+#'                     "Exponential" = "exp")),
+#'   plotOutput("distPlot")
+#'  )
+#'
+#'  server <- function(input, output, session) {
+#'    output$distPlot <- renderPlot({
+#'      dist <- switch(input$dist,
+#'                     norm = rnorm,
+#'                     unif = runif,
+#'                     lnorm = rlnorm,
+#'                     exp = rexp,
+#'                     rnorm)
+#'
+#'      hist(dist(500))
+#'    })
+#'  }
+#'  shinyApp(ui, server)
+#'
+#' }
+radio_input_386 <- function(inputId, label, choices = NULL, selected = NULL,
+                            width = NULL, choiceNames = NULL, choiceValues = NULL) {
+
+  args <- normalizeChoicesArgs(choices, choiceNames, choiceValues)
+  selected <- restoreInput(id = inputId, default = selected)
+  selected <- if (is.null(selected)) args$choiceValues[[1]] else as.character(selected)
+  if (length(selected) > 1) stop("The 'selected' argument must be of length 1")
+  options <- generateOptions(
+    inputId,
+    selected,
+    "radio",
+    args$choiceNames,
+    args$choiceValues
+  )
+  divClass <- "form-group shiny-input-radiogroup"
+  tags$div(
+    id = inputId,
+    style = if (!is.null(width)) paste0("width: ", validateCssUnit(width), ";"),
+    class = divClass,
+    tags$legend(label, `for` = inputId),
+    options
+  )
+}
+
+
+
+#' Change the value of a radio input on the client
+#'
+#' @inheritParams radio_input_386
+#'
+#' @seealso [radio_input_386()]
+#'
+#' @examples
+#' if (interactive()) {
+#'
+#'  ui <- page_386(
+#'    p("The first radio button group controls the second"),
+#'    radio_input_386("inRadioButtons", "Input radio buttons",
+#'      c("Item A", "Item B", "Item C")),
+#'    radio_input_386("inRadioButtons2", "Input radio buttons 2",
+#'      c("Item A", "Item B", "Item C"))
+#'  )
+#'
+#'  server <- function(input, output, session) {
+#'    observe({
+#'      x <- input$inRadioButtons
+#'
+#'     # Can also set the label and select items
+#'     update_radio_input_386(session, "inRadioButtons2",
+#'       label = paste("radioButtons label", x),
+#'       choices = x,
+#'       selected = x
+#'     )
+#'   })
+#'  }
+#'
+#'  shinyApp(ui, server)
+#' }
+#' @export
+update_radio_input_386 <- function(session, inputId, label = NULL, choices = NULL,
+                                   selected = NULL, choiceNames = NULL,
+                                   choiceValues = NULL) {
+  if (is.null(selected)) {
+    if (!is.null(choices))
+      selected <- choices[[1]]
+    else if (!is.null(choiceValues))
+      selected <- choiceValues[[1]]
+  }
+  updateInputOptions(
+    session,
+    inputId,
+    label,
+    choices,
+    selected,
+    "radio",
+    choiceNames,
+    choiceValues
+  )
+}
