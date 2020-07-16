@@ -2,10 +2,13 @@
 % Please edit documentation in R/inputs.R
 \name{dropdown_386}
 \alias{dropdown_386}
+\alias{open_dropdown_386}
 \alias{dropdown_item_386}
 \title{Create a Bootstrap 386 dropdown container for buttons/links}
 \usage{
 dropdown_386(..., inputId = NULL, label, status = NULL, open = FALSE)
+
+open_dropdown_386(inputId, session = shiny::getDefaultReactiveDomain())
 
 dropdown_item_386(inputId = NULL, href = NULL, label)
 }
@@ -20,10 +23,14 @@ dropdown_item_386(inputId = NULL, href = NULL, label)
 
 \item{open}{Whether to open the dropdown at start. Default to FALSE.}
 
+\item{session}{Shiny session object.}
+
 \item{href}{If simple link.}
 }
 \value{
 A shiny tag
+
+A message from R to JavaScript through the websocket.
 
 A shiny tag
 }
@@ -48,6 +55,33 @@ if (interactive()) {
 
  server <- function(input, output, session) {
    observe(print(input$btn1))
+ }
+ shinyApp(ui, server)
+}
+if (interactive()) {
+ library(shiny)
+ library(shiny386)
+
+ ui <- page_386(
+  fluidRow(
+    button_386("open", "Open dropdown", class = "btn-lg"),
+    dropdown_386(
+      inputId = "plop",
+      label = "Menu",
+      dropdown_item_386(inputId = "btn1", label = "button 1"),
+      dropdown_item_386(href = "https://www.google.com/", label = "More")
+    )
+  )
+ )
+
+ server <- function(input, output, session) {
+   observe(print(input$plop))
+   observeEvent(input$open, {
+     open_dropdown_386("plop")
+   })
+   observeEvent(req(input$plop), {
+     showNotification("Dropdown opened!")
+   })
  }
  shinyApp(ui, server)
 }

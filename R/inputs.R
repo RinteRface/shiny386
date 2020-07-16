@@ -136,6 +136,48 @@ dropdown_386 <- function(..., inputId = NULL, label, status = NULL, open = FALSE
 
 
 
+#' Create a Bootstrap 386 dropdown container for buttons/links
+#'
+#' @param inputId id of the dropdown to open.
+#' @param session Shiny session object.
+#'
+#' @return A message from R to JavaScript through the websocket.
+#' @export
+#' @rdname dropdown
+#' @examples
+#' if (interactive()) {
+#'  library(shiny)
+#'  library(shiny386)
+#'
+#'  ui <- page_386(
+#'   fluidRow(
+#'     button_386("open", "Open dropdown", class = "btn-lg"),
+#'     dropdown_386(
+#'       inputId = "plop",
+#'       label = "Menu",
+#'       dropdown_item_386(inputId = "btn1", label = "button 1"),
+#'       dropdown_item_386(href = "https://www.google.com/", label = "More")
+#'     )
+#'   )
+#'  )
+#'
+#'  server <- function(input, output, session) {
+#'    observe(print(input$plop))
+#'    observeEvent(input$open, {
+#'      open_dropdown_386("plop")
+#'    })
+#'    observeEvent(req(input$plop), {
+#'      showNotification("Dropdown opened!")
+#'    })
+#'  }
+#'  shinyApp(ui, server)
+#' }
+open_dropdown_386 <- function(inputId, session = shiny::getDefaultReactiveDomain()) {
+  session$sendInputMessage(inputId, message = NULL)
+}
+
+
+
 #' Create a Bootstrap 386 dropdown item
 #'
 #' Can be a simple link or an action button
