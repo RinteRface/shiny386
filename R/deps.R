@@ -16,6 +16,13 @@ bs4_deps <- htmltools::htmlDependency(
 )
 
 
+#' Create shiny386 dependencies
+#'
+#' Add all necessary dependencies so that shiny386 renders well
+#'
+#' @param tag Tag on which to add dependencies. We usually target the body.
+#' @export
+#' @seealso \link{page_386}.
 use_bs4_deps <- function(tag) {
-  htmltools::tagList(tag, bs4_deps)
+  tagList(tag, bs4_deps)
 }

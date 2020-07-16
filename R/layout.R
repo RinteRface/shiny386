@@ -7,26 +7,25 @@
 #' @return A list of tags
 #' @export
 page_386 <- function(..., title = NULL) {
-  shiny::tagList(
+  tagList(
     # Head
-    shiny::tags$head(
-      shiny::tags$meta(charset = "utf-8"),
-      shiny::tags$title(title),
-      shiny::tags$meta(
+    tags$head(
+      tags$meta(charset = "utf-8"),
+      tags$title(title),
+      tags$meta(
         name = "viewport",
         content = "
           width=device-width,
           initial-scale=1"
       ),
-      shiny::tags$meta(`http-equiv` = "X-UA-Compatible", content = "IE=edge")
+      tags$meta(`http-equiv` = "X-UA-Compatible", content = "IE=edge")
     ),
     # body
-    shiny::tags$body(
-      shiny::div(
+    tags$body(
+      div(
         class = "container",
         ...
       )
-      #shiny::div(class = "bootstra-cursor", style = "left: 424px; top: 504px;")
     ) %>% use_bs4_deps()
   )
 }

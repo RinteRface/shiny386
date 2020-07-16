@@ -98,3 +98,56 @@ text_input_386 <- shiny::textInput
 #'
 #' }
 text_area_input_386 <- shiny::textAreaInput
+
+
+
+
+#' Custom Bootstrap 386 switch input
+#'
+#' Similar to the shiny checkbox
+#'
+#' @inheritParams shiny::checkboxInput
+#'
+#' @return A toggle input tag.
+#' @export
+#' @seealso \link{update_toggle_input_386}.
+#' @examples
+#' if (interactive()) {
+#'  library(shiny)
+#'  library(shiny386)
+#'
+#'  ui <- page_386(
+#'   toggle_input_386("toggle", "Toggle me", TRUE),
+#'   verbatimTextOutput("val")
+#'  )
+#'
+#'  server <- function(input, output, session) {
+#'    output$val <- renderPrint(input$toggle)
+#'  }
+#'  shinyApp(ui, server)
+#' }
+toggle_input_386 <- function(inputId, label, value = FALSE, width = NULL) {
+
+  value <- restoreInput(id = inputId, default = value)
+  input_tag <- tags$input(
+    id = inputId,
+    type = "checkbox",
+    class = "custom-control-input"
+  )
+
+  if (!is.null(value) && value) {
+    input_tag <- input_tag %>% tagAppendAttributes(checked = "checked")
+  }
+
+  input_wrapper <- tags$div(
+    class = "custom-control custom-switch",
+    style = if (!is.null(width)) {
+      paste0("width: ", validateCssUnit(width), ";")
+    }
+  )
+
+  input_wrapper %>% tagAppendChildren(
+    input_tag,
+    tags$label(class = "custom-control-label", `for` = inputId, label)
+  )
+}
