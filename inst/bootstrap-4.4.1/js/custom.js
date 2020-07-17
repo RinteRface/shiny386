@@ -17,3 +17,11 @@
   });
 
 })();
+
+$(function() {
+  // handle dropdown menu in navbar: ensure that items are correctly inactivated
+  // when one click in any other item, except the dropdown toggle...
+  $(".navbar-nav > li a:not([data-toggle='dropdown'])").on("click", function() {
+    $(".navbar-nav > li a").not(this).removeClass("active");
+  });
+});
