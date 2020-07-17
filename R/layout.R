@@ -304,3 +304,48 @@ navbar_page_386 <- function (title, ..., id = NULL, selected = NULL,
 #' @export
 #' @rdname navbar
 navbar_menu_386 <- shiny::navbarMenu
+
+
+
+#' Update a Bootstrap 386 navbar on the client
+#' @inheritParams shiny::updateNavbarPage
+#' @export
+#' @rdname navbar
+#' @examples
+#' if (interactive()) {
+#'  library(shiny)
+#'  library(shiny386)
+#'
+#'  ui <- navbar_page_386(
+#'   "App Title",
+#'   id = "tabset",
+#'   selected = "Tab 2",
+#'   header = radio_input_386("controller", "Update tab", 1:4),
+#'   tabPanel(
+#'     "Tab 1",
+#'     "Content 1"
+#'   ),
+#'   tabPanel(
+#'     "Tab 2",
+#'     "Content 2"
+#'   ),
+#'   navbar_menu_386(
+#'     "More",
+#'     tab_panel_386("Tab 3", "Extra content 1"),
+#'     "----",
+#'     "Section header",
+#'     tab_panel_386("Tab 4", "Extra content 2")
+#'   )
+#'  )
+#'
+#'  server <- function(input, output, session) {
+#'    observeEvent(input$controller, {
+#'      update_navbar_page_386(session, "tabset",
+#'                             selected = paste("Tab", input$controller)
+#'      )
+#'    })
+#'  }
+#'  shinyApp(ui, server)
+#'
+#' }
+update_navbar_page_386 <- shiny::updateNavbarPage

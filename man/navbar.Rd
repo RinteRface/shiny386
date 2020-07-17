@@ -3,6 +3,7 @@
 \name{navbar_page_386}
 \alias{navbar_page_386}
 \alias{navbar_menu_386}
+\alias{update_navbar_page_386}
 \title{Create a Bootstrap 386 navbar page}
 \usage{
 navbar_page_386(
@@ -18,6 +19,8 @@ navbar_page_386(
 )
 
 navbar_menu_386(title, ..., menuName = title, icon = NULL)
+
+update_navbar_page_386(session, inputId, selected = NULL)
 }
 \arguments{
 \item{title}{The title to display in the navbar}
@@ -61,6 +64,12 @@ is needed if you want to insert/remove or show/hide an entire
 \code{navbarMenu}.}
 
 \item{icon}{Optional icon to appear on a \code{navbarMenu} tab.}
+
+\item{session}{The \code{session} object passed to function given to
+\code{shinyServer}.}
+
+\item{inputId}{The id of the \code{tabsetPanel}, \code{navlistPanel},
+or \code{navbarPage} object.}
 }
 \value{
 A shiny tag
@@ -69,6 +78,8 @@ A shiny tag
 Create a Bootstrap 386 navbar page
 
 Create a Bootstrap 386 navbar menu
+
+Update a Bootstrap 386 navbar on the client
 }
 \examples{
 if (interactive()) {
@@ -128,5 +139,41 @@ if (interactive()) {
 
  }
  shinyApp(ui, server)
+}
+if (interactive()) {
+ library(shiny)
+ library(shiny386)
+
+ ui <- navbar_page_386(
+  "App Title",
+  id = "tabset",
+  selected = "Tab 2",
+  header = radio_input_386("controller", "Update tab", 1:4),
+  tabPanel(
+    "Tab 1",
+    "Content 1"
+  ),
+  tabPanel(
+    "Tab 2",
+    "Content 2"
+  ),
+  navbar_menu_386(
+    "More",
+    tab_panel_386("Tab 3", "Extra content 1"),
+    "----",
+    "Section header",
+    tab_panel_386("Tab 4", "Extra content 2")
+  )
+ )
+
+ server <- function(input, output, session) {
+   observeEvent(input$controller, {
+     update_navbar_page_386(session, "tabset",
+                            selected = paste("Tab", input$controller)
+     )
+   })
+ }
+ shinyApp(ui, server)
+
 }
 }
