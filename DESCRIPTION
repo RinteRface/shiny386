@@ -17,4 +17,5 @@ BugReports: https://github.com/RinteRface/shiny386/issues
 Imports: 
     htmltools,
     shiny,
-    magrittr
+    magrittr,
+    httpuv

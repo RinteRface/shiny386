@@ -135,3 +135,172 @@ tab_panel_386 <- shiny::tabPanel
 #'  shinyApp(ui, server)
 #' }
 update_tabset_panel_386 <- shiny::updateTabsetPanel
+
+
+
+#' Create a Bootstrap 386 navbar page
+#'
+#' @inheritParams shiny::navbarPage
+#'
+#' @return A shiny tag
+#' @export
+#' @rdname navbar
+#' @examples
+#' if (interactive()) {
+#'  library(shiny)
+#'  library(shiny386)
+#'
+#'  ui <- navbar_page_386(
+#'   "App Title",
+#'   id = "tabset",
+#'   tab_panel_386(
+#'     "Tab 1",
+#'     radio_input_386(
+#'       "dist", "Distribution type:",
+#'       c("Normal" = "norm",
+#'         "Uniform" = "unif",
+#'         "Log-normal" = "lnorm",
+#'         "Exponential" = "exp")
+#'     ),
+#'     plotOutput("distPlot")
+#'   ),
+#'   tab_panel_386(
+#'     "Tab 2",
+#'     select_input_386(
+#'       "variable", "Variable:",
+#'       c("Cylinders" = "cyl",
+#'         "Transmission" = "am",
+#'         "Gears" = "gear")
+#'     ),
+#'     tableOutput("data")
+#'   ),
+#'   navbar_menu_386(
+#'    "More",
+#'    tab_panel_386("Summary", "Extra content 1"),
+#'    "----",
+#'    "Section header",
+#'    tab_panel_386("Table", "Extra content 2")
+#'   )
+#'  )
+#'
+#'  server <- function(input, output, session) {
+#'    output$distPlot <- renderPlot({
+#'      dist <- switch(input$dist,
+#'                     norm = rnorm,
+#'                     unif = runif,
+#'                     lnorm = rlnorm,
+#'                     exp = rexp,
+#'                     rnorm)
+#'
+#'      hist(dist(500))
+#'    })
+#'
+#'    output$data <- renderTable({
+#'      mtcars[, c("mpg", input$variable), drop = FALSE]
+#'    }, rownames = TRUE)
+#'
+#'    observe(print(input$tabset))
+#'
+#'  }
+#'  shinyApp(ui, server)
+#' }
+navbar_page_386 <- function (title, ..., id = NULL, selected = NULL,
+                        position = c("static-top", "fixed-top", "fixed-bottom"),
+                        header = NULL, footer = NULL, inverse = FALSE,
+                        windowTitle = title) {
+  pageTitle <- title
+  navbarClass <- "navbar navbar-expand-lg navbar-dark bg-primary"
+  position <- match.arg(position)
+  if (!is.null(position))
+    navbarClass <- paste(navbarClass, " ", position,
+                         sep = "")
+  if (inverse)
+    navbarClass <- paste(navbarClass, "navbar-inverse")
+  if (!is.null(id))
+    selected <- restoreInput(id = id, default = selected)
+  tabs <- list(...)
+  tabset <- buildTabset(tabs, "nav navbar-nav", NULL, id, selected)
+
+  # Some edit below since Bootstrap 4 significantly changed the layout
+  nav_items <- tabset$navList$children[[1]]
+  bs4_nav_items <- lapply(nav_items, function(x) {
+    if (!is.null(x$attribs$class)) {
+      if (x$attribs$class == "dropdown") {
+        x$attribs$class <- paste("nav-item",  x$attribs$class)
+        x$children[[1]]$attribs$class <- "nav-link"
+
+        subnav_items <- x$children[[2]]$children[[1]]
+        x$children[[2]]$children[[1]] <- lapply(subnav_items, function(y) {
+          y$attribs$class <- if (!is.null(y$attribs$class)) {
+            paste("nav-item", y$attribs$class)
+          } else {
+            "nav-item"
+          }
+
+          if (length(y$children) > 0) {
+            if (inherits(y$children[[1]], "shiny.tag")) {
+              y$children[[1]]$attribs$class <- "nav-link"
+            }
+          }
+          y
+        })
+
+      } else {
+        if (length(grep(x = x$attribs$class, pattern = "active")) > 0) {
+          x$attribs$class <- NULL
+          x$children[[1]]$attribs$class <- "nav-link active"
+        } else {
+          x$children[[1]]$attribs$class <- "nav-link"
+        }
+        x$attribs$class <- "nav-item"
+      }
+    } else {
+      x$attribs$class <- "nav-item"
+      x$children[[1]]$attribs$class <- "nav-link"
+    }
+    x
+  })
+
+  tabset$navList$children[[1]] <- bs4_nav_items
+
+  # layout a bit different from vanilla shiny since there is no collapsible
+  navId <- paste("navbar-collapse-", p_randomInt(1000, 10000), sep = "")
+  containerDiv <- div(
+    class = "container",
+    a(class = "navbar-brand", pageTitle, href = "#"),
+    tags$button(
+      type = "button",
+      class = "navbar-toggler",
+      `data-toggle` = "collapse",
+      `data-target` = paste0("#", navId),
+      `aria-controls` = navId,
+      `aria-label` = "Toggle navigation",
+      span(class = "navbar-toggler-icon")
+    ),
+    div(class = "collapse navbar-collapse", id = navId, tabset$navList)
+  )
+
+  contentDiv <- div(class = "container")
+  if (!is.null(header))
+    contentDiv <- tagAppendChild(contentDiv, div(class = "row", header))
+  contentDiv <- tagAppendChild(contentDiv, tabset$content)
+  if (!is.null(footer))
+    contentDiv <- tagAppendChild(contentDiv, div(class = "row", footer))
+
+  page_tag <- page_386(title = title)
+  page_tag[[2]][[1]]$children <- tagList(
+    tags$nav(class = navbarClass, containerDiv),
+    br(),
+    contentDiv
+  )
+
+  page_tag
+}
+
+
+
+#' Create a Bootstrap 386 navbar menu
+#' @inheritParams shiny::navbarMenu
+#' @export
+#' @rdname navbar
+navbar_menu_386 <- shiny::navbarMenu
