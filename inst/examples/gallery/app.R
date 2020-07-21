@@ -51,7 +51,14 @@ get_route_shape <- function(route) {
 ui <- page_386(
     h1("Twin Cities Buses"),
     br(),
-    tags$style("td, th {color: black}"),
+    tags$style(
+        "
+            td, th {color: black}
+            .custom-control-label::before {
+                background-color: transparent;
+            }
+        "
+    ),
     fluidRow(
         column(
             width = 9,
@@ -65,7 +72,7 @@ ui <- page_386(
             card_386(
                 status = "warning",
                 uiOutput("routeSelect"),
-                checkboxGroupInput(
+                checkbox_group_input_386(
                     "directions", "Show",
                     choices = c(
                         Northbound = 4,
@@ -75,6 +82,7 @@ ui <- page_386(
                     ),
                     selected = c(1, 2, 3, 4)
                 ),
+                br(),
                 p(
                     class = "text-muted",
                     paste(
