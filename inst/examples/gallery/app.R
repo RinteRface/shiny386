@@ -51,14 +51,7 @@ get_route_shape <- function(route) {
 ui <- page_386(
     h1("Twin Cities Buses"),
     br(),
-    tags$style(
-        "
-            td, th {color: black}
-            .custom-control-label::before {
-                background-color: transparent;
-            }
-        "
-    ),
+    tags$style("td, th {color: black}"),
     fluidRow(
         column(
             width = 9,

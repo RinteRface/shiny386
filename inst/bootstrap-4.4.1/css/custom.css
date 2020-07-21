@@ -5,3 +5,7 @@ pre {
 .shiny-file-input-progress > .progress-bar {
   color: black;
 }
+
+.custom-control-label::before {
+  background-color: transparent;
+}
