@@ -1,12 +1,15 @@
 Package: shiny386
-Title: What the Package Does (One Line, Title Case)
+Title: Old School 'Bootstrap 4' Template for Shiny
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "David",
            family = "Granjon",
            role = c("aut", "cre"),
            email = "dgranjon@ymail.com")
-Description: What the package does (one paragraph).
+Description: This template is made for people having nostalgic feelings about floppy disks
+    and other lovely stuff from that time. It is built on top of the Bootstrap 386
+    template <https://github.com/kristopolous/BOOTSTRA.386>. 
+    Less distraction for more productivity!
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
