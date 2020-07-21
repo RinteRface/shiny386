@@ -121,7 +121,7 @@ generateOptions <- function (inputId, selected, type = "checkbox", choiceNames,
     choiceValues,
     choiceNames,
     FUN = function(value, name) {
-      idx <- paste0(inputId, "-radio-", which(choiceValues == value))
+      idx <- paste0(inputId, "-", type, "-", which(choiceValues == value))
 
       inputTag <- tags$input(
         type = type,
@@ -133,7 +133,7 @@ generateOptions <- function (inputId, selected, type = "checkbox", choiceNames,
       if (value %in% selected) inputTag$attribs$checked <- "checked"
       pd <- processDeps(name, session)
       tags$div(
-        class = "custom-control custom-radio",
+        class = sprintf("custom-control custom-%s", type),
         inputTag,
         tags$label(
           class = "custom-control-label",
