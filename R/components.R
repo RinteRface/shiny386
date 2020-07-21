@@ -26,7 +26,7 @@
 jumbotron_386 <- function(..., title = NULL) {
   tags$div(
     class = "jumbotron",
-    tags$h1(class = "display-3", title),
+    if(!is.null(title)) tags$h1(class = "display-3", title),
     ...
   )
 }
