@@ -10,7 +10,6 @@ update_checkbox_group_input_386(
   label = NULL,
   choices = NULL,
   selected = NULL,
-  inline = FALSE,
   choiceNames = NULL,
   choiceValues = NULL
 )

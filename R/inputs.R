@@ -589,7 +589,7 @@ checkbox_group_input_386 <- function (inputId, label, choices = NULL, selected =
 #' }
 #' @export
 update_checkbox_group_input_386 <- function (session, inputId, label = NULL, choices = NULL, selected = NULL,
-                                             inline = FALSE, choiceNames = NULL, choiceValues = NULL) {
+                                             choiceNames = NULL, choiceValues = NULL) {
   updateInputOptions(
     session,
     inputId,
