@@ -502,6 +502,107 @@ update_radio_input_386 <- function(session, inputId, label = NULL, choices = NUL
 
 
 
+#' Create a Bootstrap 386 checkbox group input
+#'
+#' @inheritParams shiny::checkboxGroupInput
+#' @export
+#' @examples
+#' if (interactive()) {
+#'  library(shiny)
+#'  library(shiny386)
+#'
+#'  ui <- page_386(
+#'   checkbox_group_input_386("variable", "Variables to show:",
+#'    c("Cylinders" = "cyl",
+#'      "Transmission" = "am",
+#'      "Gears" = "gear")),
+#'   tableOutput("data")
+#'  )
+#'
+#'  server <- function(input, output, session) {
+#'    output$data <- renderTable({
+#'     mtcars[, c("mpg", input$variable), drop = FALSE]
+#'    }, rownames = TRUE)
+#'  }
+#'  shinyApp(ui, server)
+#'
+#' }
+checkbox_group_input_386 <- function (inputId, label, choices = NULL, selected = NULL,
+                                      width = NULL, choiceNames = NULL, choiceValues = NULL) {
+  if (is.null(choices) && is.null(choiceNames) && is.null(choiceValues)) {
+    choices <- character(0)
+  }
+  args <- normalizeChoicesArgs(choices, choiceNames, choiceValues)
+  selected <- restoreInput(id = inputId, default = selected)
+  if (!is.null(selected))
+    selected <- as.character(selected)
+  options <- generateOptions(inputId, selected, "checkbox",
+                             args$choiceNames, args$choiceValues)
+  divClass <- "form-group shiny-input-checkboxgroup"
+  tags$div(
+    id = inputId,
+    style = if (!is.null(width)) paste0("width: ", validateCssUnit(width), ";"),
+    class = divClass,
+    tags$legend(label, `for` = inputId),
+    options
+  )
+}
+
+
+
+#' Change the value of a checkbox group input on the client
+#'
+#' @inheritParams checkbox_group_input_386
+#' @param session The session object passed to function given to shinyServer.
+#'
+#' @seealso [checkbox_group_input_386()]
+#'
+#' @examples
+#' if (interactive()) {
+#'
+#'  ui <- page_386(
+#'    p("The first radio button group controls the second"),
+#'    checkbox_group_input_386("inCheckboxGroup", "Input radio buttons",
+#'      c("Item A", "Item B", "Item C")),
+#'    checkbox_group_input_386("inCheckboxGroup2", "Input radio buttons 2",
+#'      c("Item A", "Item B", "Item C"))
+#'  )
+#'
+#'  server <- function(input, output, session) {
+#'    observe({
+#'     x <- input$inCheckboxGroup
+#'
+#'     # Can use character(0) to remove all choices
+#'     if (is.null(x))
+#'       x <- character(0)
+#'
+#'     # Can also set the label and select items
+#'     update_checkbox_group_input_386(session, "inCheckboxGroup2",
+#'                              label = paste("Checkboxgroup label", length(x)),
+#'                              choices = x,
+#'                              selected = x
+#'     )
+#'    })
+#'  }
+#'
+#'  shinyApp(ui, server)
+#' }
+#' @export
+update_checkbox_group_input_386 <- function (session, inputId, label = NULL, choices = NULL, selected = NULL,
+                                             inline = FALSE, choiceNames = NULL, choiceValues = NULL) {
+  updateInputOptions(
+    session,
+    inputId,
+    label, choices,
+    selected,
+    "checkbox",
+    choiceNames,
+    choiceValues
+  )
+}
+
+
+
 #' Create a Bootstrap 386 select input
 #' @inheritParams shiny::selectInput
 #' @export
