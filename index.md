@@ -21,6 +21,8 @@ remotes::install_github("RinteRface/shiny386")
 
 <iframe width="100%" src="https://dgranjon.shinyapps.io/shiny386Demo/" allowfullscreen="" frameborder="0" scrolling="no" height="822px"></iframe>
 
+The original app may be found [here](https://shiny.rstudio.com/gallery/bus-dashboard.html)
+
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
