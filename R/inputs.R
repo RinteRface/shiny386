@@ -635,14 +635,16 @@ select_input_386 <- function(
     inputId, label, choices, selected = NULL, multiple = FALSE,
     selectize = FALSE, width = NULL, size = NULL
 ) {
-  args <- as.list(match.call())[-1]
-  defaults <- formals(sys.function())
-  defaults <- defaults[!(names(defaults) %in% names(args))]
-
   htmltools::tagQuery(
-    do.call(
-      shiny::selectInput,
-      dropNulls(c(args, defaults))
+    shiny::selectInput(
+      inputId,
+      label,
+      choices,
+      selected,
+      multiple,
+      selectize = FALSE,
+      width,
+      size
     )
   )$
     find("select")$

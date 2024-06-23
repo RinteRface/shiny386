@@ -1,5 +1,4 @@
 # packages ----------------------------------------------------------------
-
 library(shiny)
 library(shiny386)
 library(leaflet)
@@ -7,45 +6,32 @@ library(dplyr)
 library(curl) # make the jsonlite suggested dependency explicit
 library(jsonlite)
 
-
-# utils -------------------------------------------------------------------
-
 # 1=South, 2=East, 3=West, 4=North
-dirColors <- c("1" = "#595490", "2" = "#527525", "3" = "#A93F35", "4" = "#BA48AA")
+dirColors <-c("1"="#595490", "2"="#527525", "3"="#A93F35", "4"="#BA48AA")
 
-# Download data from the Twin Cities Metro Transit API
-# http://svc.metrotransit.org/NexTrip/help
-getMetroData <- function(path) {
-    url <- paste0("http://svc.metrotransit.org/NexTrip/", path, "?format=json")
-    jsonlite::fromJSON(url)
-}
-
-# Load static trip and shape data
-trips <- readRDS("metrotransit-data/rds/trips.rds")
-shapes <- readRDS("metrotransit-data/rds/shapes.rds")
-
+# Dynamically load trip and shape data
+gtfs <- get_transit_gtfs()
 
 # Get the shape for a particular route. This isn't perfect. Each route has a
 # large number of different trips, and each trip can have a different shape.
 # This function simply returns the most commonly-used shape across all trips for
 # a particular route.
-get_route_shape <- function(route) {
-    routeid <- paste0(route, "-75")
+get_route_shape <- function(routeid) {
+  # routeid <- paste0(route, "-75")
 
-    # For this route, get all the shape_ids listed in trips, and a count of how
-    # many times each shape is used. We'll just pick the most commonly-used shape.
-    shape_counts <- trips %>%
-        filter(route_id == routeid) %>%
-        group_by(shape_id) %>%
-        summarise(n = n()) %>%
-        arrange(-n)
+  # For this route, get all the shape_ids listed in trips, and a count of how
+  # many times each shape is used. We'll just pick the most commonly-used shape.
+  shape_counts <- gtfs$trips %>%
+    filter(route_id == routeid) %>%
+    group_by(shape_id) %>%
+    summarise(n = n()) %>%
+    arrange(-n)
 
-    shapeid <- shape_counts$shape_id[1]
+  shapeid <- shape_counts$shape_id[1]
 
-    # Get the coordinates for the shape_id
-    shapes %>% filter(shape_id == shapeid)
+  # Get the coordinates for the shape_id
+  gtfs$shapes %>% filter(shape_id == shapeid)
 }
-
 
 # UI ----------------------------------------------------------------------
 ui <- page_386(
@@ -114,169 +100,166 @@ ui <- page_386(
 
 
 # server ------------------------------------------------------------------
-
 server <- function(input, output, session) {
 
-    # Route select input box
-    output$routeSelect <- renderUI({
-        live_vehicles <- getMetroData("VehicleLocations/0")
+  # Route select input box
+  output$routeSelect <- renderUI({
+    # live_vehicles <- getMetroData("VehicleLocations/0")
 
-        routeNums <- sort(unique(as.numeric(live_vehicles$Route)))
-        # Add names, so that we can add all=0
-        names(routeNums) <- routeNums
-        routeNums <- c(All = 0, routeNums)
-        selectInput("routeNum", "Route", choices = routeNums, selected = routeNums[2])
-    })
+    routeNums <-
+      sort(unique(as.numeric(
+        realtime_locations(gtfs = gtfs)$Route
+      )))
 
-    # Locations of all active vehicles
-    vehicleLocations <- reactive({
-        input$refresh # Refresh if button clicked
+    # Add names, so that we can add all=0
+    names(routeNums) <- routeNums
+    routeNums <- c(All = 0, routeNums)
+    select_input_386("routeNum", "Route", choices = routeNums, selected = routeNums[2])
+  })
 
-        # Get interval (minimum 30)
-        interval <- max(as.numeric(input$interval), 30)
-        # Invalidate this reactive after the interval has passed, so that data is
-        # fetched again.
-        invalidateLater(interval * 1000, session)
+  # Locations of all active vehicles
+  vehicleLocations <- reactive({
+    input$refresh # Refresh if button clicked
 
-        getMetroData("VehicleLocations/0")
-    })
+    # Get interval (minimum 30)
+    interval <- max(as.numeric(input$interval), 30)
+    # Invalidate this reactive after the interval has passed, so that data is
+    # fetched again.
+    invalidateLater(interval * 1000, session)
 
-    # Locations of vehicles for a particular route
-    routeVehicleLocations <- reactive({
-        if (is.null(input$routeNum)) {
-            return()
-        }
+    realtime_locations(gtfs = gtfs)
+  })
 
-        locations <- vehicleLocations()
+  # Data frame of vehicle locations for a particular route
+  routeVehicleLocations <- reactive({
+    if (is.null(input$routeNum))
+      return()
 
-        if (as.numeric(input$routeNum) == 0) {
-            return(locations)
-        }
+    locations <- vehicleLocations()
 
-        locations[locations$Route == input$routeNum, ]
-    })
+    if (as.numeric(input$routeNum) == 0)
+      return(locations)
 
-    # Get time that vehicles locations were updated
-    lastUpdateTime <- reactive({
-        vehicleLocations() # Trigger this reactive when vehicles locations are updated
-        Sys.time()
-    })
+    locations[locations$Route == input$routeNum, ]
+  })
 
-    # Number of seconds since last update
-    output$timeSinceLastUpdate <- renderUI({
-        # Trigger this every 5 seconds
-        invalidateLater(5000, session)
-        p(
-            class = "text-muted",
-            "Data refreshed ",
-            round(difftime(Sys.time(), lastUpdateTime(), units = "secs")),
-            " seconds ago."
-        )
-    })
+  # Get time that vehicles locations were updated
+  lastUpdateTime <- reactive({
+    vehicleLocations() # Trigger this reactive when vehicles locations are updated
+    Sys.time()
+  })
 
-    output$numVehiclesTable <- renderUI({
-        locations <- routeVehicleLocations()
-        if (length(locations) == 0 || nrow(locations) == 0) {
-            return(NULL)
-        }
+  # Number of seconds since last update
+  output$timeSinceLastUpdate <- renderUI({
+    # Trigger this every 5 seconds
+    invalidateLater(5000, session)
+    p(
+      class = "text-muted",
+      "Data refreshed ",
+      round(difftime(Sys.time(), lastUpdateTime(), units="secs")),
+      " seconds ago."
+    )
+  })
 
-        # Create a Bootstrap-styled table
-        tags$table(
-            class = "table",
-            tags$thead(tags$tr(
-                tags$th("Color"),
-                tags$th("Direction"),
-                tags$th("Number of vehicles")
-            )),
-            tags$tbody(
-                tags$tr(
-                    tags$td(span(style = sprintf(
-                        "width:1.1em; height:1.1em; background-color:%s; display:inline-block;",
-                        dirColors[4]
-                    ))),
-                    tags$td("Northbound"),
-                    tags$td(nrow(locations[locations$Direction == "4", ]))
-                ),
-                tags$tr(
-                    tags$td(span(style = sprintf(
-                        "width:1.1em; height:1.1em; background-color:%s; display:inline-block;",
-                        dirColors[1]
-                    ))),
-                    tags$td("Southbound"),
-                    tags$td(nrow(locations[locations$Direction == "1", ]))
-                ),
-                tags$tr(
-                    tags$td(span(style = sprintf(
-                        "width:1.1em; height:1.1em; background-color:%s; display:inline-block;",
-                        dirColors[2]
-                    ))),
-                    tags$td("Eastbound"),
-                    tags$td(nrow(locations[locations$Direction == "2", ]))
-                ),
-                tags$tr(
-                    tags$td(span(style = sprintf(
-                        "width:1.1em; height:1.1em; background-color:%s; display:inline-block;",
-                        dirColors[3]
-                    ))),
-                    tags$td("Westbound"),
-                    tags$td(nrow(locations[locations$Direction == "3", ]))
-                ),
-                tags$tr(
-                    style = "background-color: grey",
-                    tags$td(),
-                    tags$td("Total"),
-                    tags$td(nrow(locations))
-                )
-            )
-        )
-    })
+  output$numVehiclesTable <- renderUI({
+    locations <- routeVehicleLocations()
+    if (length(locations) == 0 || nrow(locations) == 0)
+      return(NULL)
 
-    # Store last zoom button value so we can detect when it's clicked
-    lastZoomButtonValue <- NULL
+    # Create a Bootstrap-styled table
+    tags$table(class = "table",
+               tags$thead(tags$tr(
+                 tags$th("Color"),
+                 tags$th("Direction"),
+                 tags$th("Number of vehicles")
+               )),
+               tags$tbody(
+                 tags$tr(
+                   tags$td(span(style = sprintf(
+                     "width:1.1em; height:1.1em; background-color:%s; display:inline-block;",
+                     dirColors[4]
+                   ))),
+                   tags$td("Northbound"),
+                   tags$td(nrow(locations[locations$Direction == "4",]))
+                 ),
+                 tags$tr(
+                   tags$td(span(style = sprintf(
+                     "width:1.1em; height:1.1em; background-color:%s; display:inline-block;",
+                     dirColors[1]
+                   ))),
+                   tags$td("Southbound"),
+                   tags$td(nrow(locations[locations$Direction == "1",]))
+                 ),
+                 tags$tr(
+                   tags$td(span(style = sprintf(
+                     "width:1.1em; height:1.1em; background-color:%s; display:inline-block;",
+                     dirColors[2]
+                   ))),
+                   tags$td("Eastbound"),
+                   tags$td(nrow(locations[locations$Direction == "2",]))
+                 ),
+                 tags$tr(
+                   tags$td(span(style = sprintf(
+                     "width:1.1em; height:1.1em; background-color:%s; display:inline-block;",
+                     dirColors[3]
+                   ))),
+                   tags$td("Westbound"),
+                   tags$td(nrow(locations[locations$Direction == "3",]))
+                 ),
+                 tags$tr(class = "active",
+                         tags$td(),
+                         tags$td("Total"),
+                         tags$td(nrow(locations))
+                 )
+               )
+    )
+  })
 
-    output$busmap <- renderLeaflet({
-        locations <- routeVehicleLocations()
-        if (length(locations) == 0) {
-            return(NULL)
-        }
+  # Store last zoom button value so we can detect when it's clicked
+  lastZoomButtonValue <- NULL
 
-        # Show only selected directions
-        locations <- filter(locations, Direction %in% as.numeric(input$directions))
+  output$busmap <- renderLeaflet({
+    locations <- routeVehicleLocations()
+    if (length(locations) == 0)
+      return(NULL)
 
-        # Four possible directions for bus routes
-        dirPal <- colorFactor(dirColors, names(dirColors))
+    # Show only selected directions
+    locations <- filter(locations, Direction %in% as.numeric(input$directions))
 
-        map <- leaflet(locations) %>%
-            addTiles("http://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png") %>%
-            addCircleMarkers(
-                ~VehicleLongitude,
-                ~VehicleLatitude,
-                color = ~ dirPal(Direction),
-                opacity = 0.8,
-                radius = 8
-            )
+    # Four possible directions for bus routes
+    dirPal <- colorFactor(dirColors, names(dirColors))
 
-        if (as.numeric(input$routeNum) != 0) {
-            route_shape <- get_route_shape(input$routeNum)
+    map <- leaflet(locations) %>%
+      addTiles('http://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png') %>%
+      addCircleMarkers(
+        ~VehicleLongitude,
+        ~VehicleLatitude,
+        color = ~dirPal(Direction),
+        opacity = 0.8,
+        radius = 8
+      )
 
-            map <- addPolylines(map,
-                                route_shape$shape_pt_lon,
-                                route_shape$shape_pt_lat,
-                                fill = FALSE
-            )
-        }
+    if (as.numeric(input$routeNum) != 0) {
+      route_shape <- get_route_shape(input$routeNum)
 
-        rezoom <- "first"
-        # If zoom button was clicked this time, and store the value, and rezoom
-        if (!identical(lastZoomButtonValue, input$zoomButton)) {
-            lastZoomButtonValue <<- input$zoomButton
-            rezoom <- "always"
-        }
+      map <- addPolylines(map,
+                          route_shape$shape_pt_lon,
+                          route_shape$shape_pt_lat,
+                          fill = FALSE
+      )
+    }
 
-        map <- map %>% mapOptions(zoomToLimits = rezoom)
+    rezoom <- "first"
+    # If zoom button was clicked this time, and store the value, and rezoom
+    if (!identical(lastZoomButtonValue, input$zoomButton)) {
+      lastZoomButtonValue <<- input$zoomButton
+      rezoom <- "always"
+    }
 
-        map
-    })
+    map <- map %>% mapOptions(zoomToLimits = rezoom)
+
+    map
+  })
 }
 
 shinyApp(ui, server)
