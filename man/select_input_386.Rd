@@ -10,7 +10,7 @@ select_input_386(
   choices,
   selected = NULL,
   multiple = FALSE,
-  selectize = TRUE,
+  selectize = FALSE,
   width = NULL,
   size = NULL
 )
@@ -25,7 +25,7 @@ named, then that name --- rather than the value --- is displayed to the
 user. It's also possible to group related inputs by providing a named list
 whose elements are (either named or unnamed) lists, vectors, or factors. In
 this case, the outermost names will be used as the group labels (leveraging
-the \code{<optgroup>} HTML tag) for the elements in the respective sublist. See
+the \verb{<optgroup>} HTML tag) for the elements in the respective sublist. See
 the example section for a small demo of this feature.}
 
 \item{selected}{The initially selected value (or multiple values if \code{multiple = TRUE}). If not specified then defaults to the first value for
@@ -45,6 +45,10 @@ but when \code{size} is set, it will be a box instead.}
 }
 \description{
 Create a Bootstrap 386 select input
+}
+\note{
+Incompatible with selectize. Set to FALSE
+by default to have correct CSS rendering.
 }
 \examples{
 if (interactive()) {

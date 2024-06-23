@@ -4,16 +4,22 @@
 \alias{update_tabset_panel_386}
 \title{Update a Bootstrap 386 tabset panel on the client}
 \usage{
-update_tabset_panel_386(session, inputId, selected = NULL)
+update_tabset_panel_386(
+  session = getDefaultReactiveDomain(),
+  inputId,
+  selected = NULL
+)
 }
 \arguments{
 \item{session}{The \code{session} object passed to function given to
-\code{shinyServer}.}
+\code{shinyServer}. Default is \code{getDefaultReactiveDomain()}.}
 
 \item{inputId}{The id of the \code{tabsetPanel}, \code{navlistPanel},
 or \code{navbarPage} object.}
 
-\item{selected}{The name of the tab to make active.}
+\item{selected}{The \code{value} (or, if none was supplied, the \code{title})
+of the tab that should be selected by default. If \code{NULL}, the first
+tab will be selected.}
 }
 \description{
 Update a Bootstrap 386 tabset panel on the client

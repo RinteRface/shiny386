@@ -604,6 +604,10 @@ update_checkbox_group_input_386 <- function (session, inputId, label = NULL, cho
 
 
 #' Create a Bootstrap 386 select input
+#'
+#' @note Incompatible with selectize. Set to FALSE
+#' by default to have correct CSS rendering.
+#'
 #' @inheritParams shiny::selectInput
 #' @export
 #' @examples
@@ -627,7 +631,25 @@ update_checkbox_group_input_386 <- function (session, inputId, label = NULL, cho
 #'  shinyApp(ui, server)
 #'
 #' }
-select_input_386 <- shiny::selectInput
+select_input_386 <- function(
+    inputId, label, choices, selected = NULL, multiple = FALSE,
+    selectize = FALSE, width = NULL, size = NULL
+) {
+  args <- as.list(match.call())[-1]
+  defaults <- formals(sys.function())
+  defaults <- defaults[!(names(defaults) %in% names(args))]
+
+  htmltools::tagQuery(
+    do.call(
+      shiny::selectInput,
+      dropNulls(c(args, defaults))
+    )
+  )$
+    find("select")$
+    addClass("custom-select")$
+    removeClass("form-control")$
+    allTags()
+}
 
 
 
