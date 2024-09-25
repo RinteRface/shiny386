@@ -73,30 +73,22 @@ tabset_panel_386 <- function(..., id = NULL, selected = NULL,
   )
 
   # Some edit below since Bootstrap 4 significantly changed the layout
-  nav_items <- temp_tabset$children[[1]]$children[[1]]
-  found_active <- FALSE
-  bs4_nav_items <- lapply(nav_items, function(x) {
-    if (!is.null(x$attribs$class)) {
-      if (grep(x = x$attribs$class, pattern = "active")) {
-        x$attribs$class <- NULL
-        found_active <- TRUE
+  htmltools::tagQuery(temp_tabset)$
+    find("li")$
+    each(
+      function(x, i) {
+        # replace text
+        current_tab <- x$children[[1]]$attribs$`data-value`
+        x$attribs$class <- "nav-item"
+        x$children[[1]]$attribs$class <- if (selected == current_tab) {
+          "nav-link active"
+        } else {
+          "nav-link"
+        }
+        x
       }
-    }
-    x$attribs$class <- if (is.null(x$attribs$class)) {
-      "nav-item"
-    } else {
-      paste("nav-item",  x$attribs$class)
-    }
-    x$children[[1]]$attribs$class <- if (found_active) {
-      "nav-link active"
-    } else {
-      "nav-link"
-    }
-    x
-  })
-
-  temp_tabset$children[[1]]$children[[1]] <- bs4_nav_items
-  temp_tabset
+    )$
+    allTags()
 }
 
 
@@ -208,9 +200,9 @@ update_tabset_panel_386 <- shiny::updateTabsetPanel
 #'  shinyApp(ui, server)
 #' }
 navbar_page_386 <- function (title, ..., id = NULL, selected = NULL,
-                        position = c("static-top", "fixed-top", "fixed-bottom"),
-                        header = NULL, footer = NULL, inverse = FALSE,
-                        windowTitle = title) {
+                             position = c("static-top", "fixed-top", "fixed-bottom"),
+                             header = NULL, footer = NULL, inverse = FALSE,
+                             windowTitle = title) {
   pageTitle <- title
   navbarClass <- "navbar navbar-expand-lg navbar-dark bg-primary"
   position <- match.arg(position)

@@ -10,7 +10,7 @@ select_input_386(
   choices,
   selected = NULL,
   multiple = FALSE,
-  selectize = TRUE,
+  selectize = FALSE,
   width = NULL,
   size = NULL
 )
@@ -45,6 +45,10 @@ but when \code{size} is set, it will be a box instead.}
 }
 \description{
 Create a Bootstrap 386 select input
+}
+\note{
+Incompatible with selectize. Set to FALSE
+by default to have correct CSS rendering.
 }
 \examples{
 if (interactive()) {

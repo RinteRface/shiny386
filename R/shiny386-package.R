@@ -5,5 +5,4 @@
 #' @name shiny386
 #' @import htmltools
 #' @import shiny
-#' @docType package
 "_PACKAGE"
