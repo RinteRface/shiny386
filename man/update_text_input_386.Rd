@@ -5,7 +5,7 @@
 \title{Update a Bootstrap 386 text input on the client}
 \usage{
 update_text_input_386(
-  session,
+  session = getDefaultReactiveDomain(),
   inputId,
   label = NULL,
   value = NULL,
@@ -14,15 +14,17 @@ update_text_input_386(
 }
 \arguments{
 \item{session}{The \code{session} object passed to function given to
-\code{shinyServer}.}
+\code{shinyServer}. Default is \code{getDefaultReactiveDomain()}.}
 
 \item{inputId}{The id of the input object.}
 
 \item{label}{The label to set for the input object.}
 
-\item{value}{The value to set for the input object.}
+\item{value}{Initial value.}
 
-\item{placeholder}{The placeholder to set for the input object.}
+\item{placeholder}{A character string giving the user a hint as to what can
+be entered into the control. Internet Explorer 8 and 9 do not support this
+option.}
 }
 \description{
 Update a Bootstrap 386 text input on the client

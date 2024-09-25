@@ -6,4 +6,4 @@
 #' @import htmltools
 #' @import shiny
 #' @docType package
-NULL
+"_PACKAGE"

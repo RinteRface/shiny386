@@ -28,15 +28,27 @@ pak::pak("RinteRface/shiny386")
 
 ## Demo
 
-```{r showcase-code, eval=TRUE, echo=FALSE}
+```{r penguins-code, eval=TRUE, echo=FALSE}
 card(
-  shiny386:::create_link_iframe(shiny386:::shinylive_links["inst/examples/shinylive/basic"]),
+  shiny386:::create_app_link(shiny386:::shinylive_links["inst/examples/shinylive/penguins"], header = FALSE),
   full_screen = TRUE,
   style = "margin: 0 auto; float: none;"
 )
 ```
 
-The original app may be found [here](https://shiny.rstudio.com/gallery/bus-dashboard.html)
+The code may be found [here](https://github.com/RinteRface/shiny386/blob/78c01d766912f9d1168e28fdd77e94bf4c93ebe1/inst/examples/shinylive/penguins/app.R).
+
+<br/>
+
+You can play with the demo app below and modify the code.
+
+```{r basic-code, eval=TRUE, echo=FALSE}
+card(
+  shiny386:::create_app_link(shiny386:::shinylive_links["inst/examples/shinylive/basic"], mode = "editor"),
+  full_screen = TRUE,
+  style = "margin: 0 auto; float: none;"
+)
+```
 
 ## Example
 

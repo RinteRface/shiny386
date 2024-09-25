@@ -2,8 +2,21 @@
 % Please edit documentation in R/shiny386-package.R
 \docType{package}
 \name{shiny386}
+\alias{shiny386-package}
 \alias{shiny386}
 \title{shiny386}
 \description{
 Old school Bootstrap 4 template for Shiny
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/RinteRface/shiny386}
+  \item Report bugs at \url{https://github.com/RinteRface/shiny386/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: David Granjon \email{dgranjon@ymail.com}
+
 }

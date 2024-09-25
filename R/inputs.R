@@ -352,7 +352,7 @@ update_toggle_input_386 <- function (session, inputId, label = NULL, value = NUL
 #'  shinyApp(ui, server)
 #' }
 checkbox_input_386 <- function(inputId, label, value = FALSE, width = NULL) {
-  create_checkbox_tag(inputId, label, value = FALSE, width = NULL, type = "checkbox")
+  create_checkbox_tag(inputId, label, value = value, width = NULL, type = "checkbox")
 }
 
 

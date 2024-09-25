@@ -20,7 +20,11 @@ navbar_page_386(
 
 navbar_menu_386(title, ..., menuName = title, icon = NULL)
 
-update_navbar_page_386(session, inputId, selected = NULL)
+update_navbar_page_386(
+  session = getDefaultReactiveDomain(),
+  inputId,
+  selected = NULL
+)
 }
 \arguments{
 \item{title}{The title to display in the navbar}
@@ -30,7 +34,7 @@ update_navbar_page_386(session, inputId, selected = NULL)
 section headers. If the string is a set of dashes like \code{"----"} a
 horizontal separator will be displayed in the menu.}
 
-\item{id}{If provided, you can use \code{input$}\emph{\code{id}} in your
+\item{id}{If provided, you can use \verb{input$}\emph{\code{id}} in your
 server logic to determine which of the current tabs is active. The value
 will correspond to the \code{value} argument that is passed to
 \code{\link[shiny:tabPanel]{tabPanel()}}.}
@@ -56,8 +60,10 @@ tabPanels}
 \item{inverse}{\code{TRUE} to use a dark background and light text for the
 navigation bar}
 
-\item{windowTitle}{The title that should be displayed by the browser window.
-Useful if \code{title} is not a string.}
+\item{windowTitle}{the browser window title (as a character string). The
+default value, \code{NA}, means to use any character strings that appear in
+\code{title} (if none are found, the host URL of the page is displayed by
+default).}
 
 \item{menuName}{A name that identifies this \code{navbarMenu}. This
 is needed if you want to insert/remove or show/hide an entire
@@ -66,7 +72,7 @@ is needed if you want to insert/remove or show/hide an entire
 \item{icon}{Optional icon to appear on a \code{navbarMenu} tab.}
 
 \item{session}{The \code{session} object passed to function given to
-\code{shinyServer}.}
+\code{shinyServer}. Default is \code{getDefaultReactiveDomain()}.}
 
 \item{inputId}{The id of the \code{tabsetPanel}, \code{navlistPanel},
 or \code{navbarPage} object.}
