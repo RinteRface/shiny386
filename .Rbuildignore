@@ -8,3 +8,4 @@
 ^LICENSE\.md$
 ^.vscode$
 ^index\.md$
+^README\.Rmd$

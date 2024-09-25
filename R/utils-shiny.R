@@ -468,3 +468,16 @@ buildTabItem <- function (index, tabsetId, foundSelected, tabs = NULL, divTag = 
   }
   return(list(liTag = liTag, divTag = divTag))
 }
+
+create_link_iframe <- function(link) {
+  shiny::tags$iframe(
+    class = "html-fill-item",
+    src = link,
+    height = "800", 
+    width = "100%", 
+    style = "border: 1px solid rgba(0,0,0,0.175); border-radius: .375rem;", 
+    allowfullscreen = "", 
+    allow = "autoplay", 
+    `data-external` = "1"
+  )
+}
