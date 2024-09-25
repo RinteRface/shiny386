@@ -37,7 +37,7 @@ toast_386 <- function(id, title = NULL, subtitle = NULL, ..., img = NULL) {
     `data-toggle` = "toast"
   )
 
-  toast_wrapper %>% tagAppendChildren(toast_header, toast_body)
+  tagAppendChildren(toast_wrapper, toast_header, toast_body)
 }
 
 

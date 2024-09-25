@@ -31,6 +31,8 @@ tab will be selected.}
 conjunction with \code{\link[shiny:tabPanelBody]{tabPanelBody()}} and \code{\link[shiny:updateTabsetPanel]{updateTabsetPanel()}} to control the
 active tab via other input controls. (See example below)}
 }}
+
+\item{position}{Tabs position (left or right).}
 }
 \description{
 Create a Bootstrap 386 tabset panel

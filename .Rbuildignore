@@ -9,3 +9,4 @@
 ^.vscode$
 ^index\.md$
 ^README\.Rmd$
+^index\.Rmd$

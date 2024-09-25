@@ -21,5 +21,7 @@ Imports:
     htmltools,
     shiny,
     httpuv
+Suggests:
+    bslib
 Depends: 
     R (>= 2.10)

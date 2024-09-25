@@ -27,7 +27,7 @@ create_checkbox_tag <- function(inputId, label, value = FALSE, width = NULL,
   )
 
   if (!is.null(value) && value) {
-    input_tag <- input_tag %>% tagAppendAttributes(checked = "checked")
+    input_tag <- tagAppendAttributes(input_tag, checked = "checked")
   }
 
   input_wrapper <- tags$div(
@@ -37,7 +37,8 @@ create_checkbox_tag <- function(inputId, label, value = FALSE, width = NULL,
     }
   )
 
-  input_wrapper %>% tagAppendChildren(
+  tagAppendChildren(
+    input_wrapper,
     input_tag,
     tags$label(class = "custom-control-label", `for` = inputId, label)
   )

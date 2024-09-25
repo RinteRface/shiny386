@@ -21,12 +21,14 @@ page_386 <- function(..., title = NULL) {
       tags$meta(`http-equiv` = "X-UA-Compatible", content = "IE=edge")
     ),
     # body
-    tags$body(
-      div(
-        class = "container",
-        ...
+    use_bs4_deps(
+      tags$body(
+        div(
+          class = "container",
+          ...
+        )
       )
-    ) %>% use_bs4_deps()
+    ) 
   )
 }
 
@@ -34,6 +36,7 @@ page_386 <- function(..., title = NULL) {
 
 #' Create a Bootstrap 386 tabset panel
 #' @inheritParams shiny::tabsetPanel
+#' @param position Tabs position (left or right).
 #' @export
 #' @examples
 #' if (interactive()) {
