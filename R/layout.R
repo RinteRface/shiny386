@@ -28,7 +28,7 @@ page_386 <- function(..., title = NULL) {
           ...
         )
       )
-    )
+    ) 
   )
 }
 
@@ -36,7 +36,7 @@ page_386 <- function(..., title = NULL) {
 
 #' Create a Bootstrap 386 tabset panel
 #' @inheritParams shiny::tabsetPanel
-#' @param position Tabs position.
+#' @param position Tabs position (left or right).
 #' @export
 #' @examples
 #' if (interactive()) {

@@ -12,6 +12,7 @@ Old school Bootstrap 4 template for Shiny
 Useful links:
 \itemize{
   \item \url{https://github.com/RinteRface/shiny386}
+  \item \url{https://rinterface.github.io/shiny386}
   \item Report bugs at \url{https://github.com/RinteRface/shiny386/issues}
 }
 

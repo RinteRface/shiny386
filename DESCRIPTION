@@ -1,6 +1,6 @@
 Package: shiny386
 Title: Old School 'Bootstrap 4' Template for Shiny
-Version: 0.0.0.9000
+Version: 0.0.1.9000
 Authors@R: 
     person(given = "David",
            family = "Granjon",
@@ -12,12 +12,16 @@ Description: This template is made for people having nostalgic feelings about fl
     Less distraction for more productivity!
 License: MIT + file LICENSE
 Encoding: UTF-8
+LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
-URL: https://github.com/RinteRface/shiny386
+RoxygenNote: 7.3.2
+URL: https://github.com/RinteRface/shiny386, https://rinterface.github.io/shiny386
 BugReports: https://github.com/RinteRface/shiny386/issues
 Imports: 
     htmltools (>= 0.5.2),
     shiny,
-    httpuv,
+    httpuv
+Suggests:
     bslib
+Depends: 
+    R (>= 2.10)
