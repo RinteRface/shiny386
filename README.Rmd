@@ -25,21 +25,3 @@ pak::paks("RinteRface/shiny386")
 ## Example
 
 <img src="man/figures/penguins-demo.png" alt="shiny366 demo image" width="100%">
-
-<p class="text-center">
-<a 
-class="btn btn-primary" 
-data-bs-toggle="collapse" 
-href="#demo-code" 
-role="button" 
-aria-expanded="false" 
-aria-controls="demo-code">
-Toggle code
-</a>
-</p>
-
-<div class="collapse" id="demo-code">
-```{r, results="asis", echo=FALSE, warning=FALSE, comment = ""}
-shiny386:::print_r_code("penguins")
-```
-</div>

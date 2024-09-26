@@ -36,7 +36,23 @@ card(
 )
 ```
 
-The code may be found [here](https://github.com/RinteRface/shiny386/blob/78c01d766912f9d1168e28fdd77e94bf4c93ebe1/inst/examples/shinylive/penguins/app.R).
+<p class="text-center mt-2">
+<a 
+class="btn btn-primary" 
+data-bs-toggle="collapse" 
+href="#demo-code" 
+role="button" 
+aria-expanded="false" 
+aria-controls="demo-code">
+Toggle code
+</a>
+</p>
+
+<div class="collapse" id="demo-code">
+```{r, results="asis", echo=FALSE, warning=FALSE, comment = ""}
+shiny386:::print_r_code("penguins")
+```
+</div>
 
 <br/>
 
