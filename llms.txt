@@ -1,0 +1,228 @@
+# shiny386
+
+The goal of shiny386 is to provide an old school Bootstrap 4 template
+for Shiny. It is built on top of the [Bootstrap
+386](http://kristopolous.github.io/BOOTSTRA.386/demo.md) HTML template.
+
+## Installation
+
+You can install the released version of shiny386 from Github with:
+
+``` r
+
+pak::pak("RinteRface/shiny386")
+```
+
+## Demo
+
+Expand
+
+![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdib3g9IjAgMCAyNCAyNCIgc3R5bGU9ImhlaWdodDoxZW07d2lkdGg6MWVtO2ZpbGw6Y3VycmVudENvbG9yOyIgYXJpYS1oaWRkZW49InRydWUiIHJvbGU9ImltZyI+PHBhdGggZD0iTTIwIDVDMjAgNC40IDE5LjYgNCAxOSA0SDEzQzEyLjQgNCAxMiAzLjYgMTIgM0MxMiAyLjQgMTIuNCAyIDEzIDJIMjFDMjEuNiAyIDIyIDIuNCAyMiAzVjExQzIyIDExLjYgMjEuNiAxMiAyMSAxMkMyMC40IDEyIDIwIDExLjYgMjAgMTFWNVpNNCAxOUM0IDE5LjYgNC40IDIwIDUgMjBIMTFDMTEuNiAyMCAxMiAyMC40IDEyIDIxQzEyIDIxLjYgMTEuNiAyMiAxMSAyMkgzQzIuNCAyMiAyIDIxLjYgMiAyMVYxM0MyIDEyLjQgMi40IDEyIDMgMTJDMy42IDEyIDQgMTIuNCA0IDEzVjE5WiIgLz48L3N2Zz4=)
+
+[Toggle code](#demo-code)
+
+``` r
+
+library(shiny)
+library(shiny386)
+library(bslib)
+library(dplyr)
+library(ggplot2)
+library(ggExtra)
+library(thematic)
+
+thematic_shiny(font = "auto")
+
+penguins_csv <- "https://raw.githubusercontent.com/jcheng5/simplepenguins.R/main/penguins.csv"
+
+df <- readr::read_csv(penguins_csv)
+# Find subset of columns that are suitable for scatter plot
+df_num <- df |> select(where(is.numeric), -Year)
+
+ui <- page_386(
+  h1("Penguins App"),
+  br(),
+
+  h3("This app is just amazing..."),
+
+  fluidRow(
+    column(
+      width = 4,
+      card_386(
+        title = "Aesthetics",
+        status = "warning",
+        select_input_386("xvar", "X variable", colnames(df_num), selected = "Bill Length (mm)"),
+        select_input_386("yvar", "Y variable", colnames(df_num), selected = "Bill Depth (mm)"),
+        checkbox_group_input_386(
+          "species", "Filter by species",
+          choices = unique(df$Species),
+          selected = unique(df$Species)
+        )
+      ),
+      card_386(
+        title = "Other options",
+        status = "warning",
+        checkbox_input_386("by_species", "Show species", TRUE),
+        checkbox_input_386("show_margins", "Show marginal plots", TRUE),
+        checkbox_input_386("smooth", "Add smoother")
+      ),
+      button_386("run", "Do plot!", class = "btn-lg btn-block")
+    ),
+    column(
+      width = 8,
+      jumbotron_386(plotOutput("scatter"))
+    )
+  )
+)
+
+server <- function(input, output, session) {
+
+  subsetted <- eventReactive(input$run, {
+    req(input$species)
+    df |> filter(Species %in% input$species)
+  })
+
+  output$scatter <- renderPlot(
+    {
+      p <- ggplot(subsetted(), aes(.data[[input$xvar]], .data[[input$yvar]])) +
+        list(
+          theme(legend.position = "bottom"),
+          if (input$by_species) aes(color = Species),
+          geom_point(),
+          if (input$smooth) geom_smooth()
+        )
+
+      if (input$show_margins) {
+        margin_type <- if (input$by_species) "density" else "histogram"
+        p <- ggExtra::ggMarginal(p,
+          type = margin_type, margins = "both",
+          size = 8, groupColour = input$by_species, groupFill = input$by_species
+        )
+      }
+
+      p
+    },
+    res = 100
+  )
+}
+
+shinyApp(ui, server)
+```
+
+  
+
+You can play with the demo app below and modify the code.
+
+Expand
+
+![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdib3g9IjAgMCAyNCAyNCIgc3R5bGU9ImhlaWdodDoxZW07d2lkdGg6MWVtO2ZpbGw6Y3VycmVudENvbG9yOyIgYXJpYS1oaWRkZW49InRydWUiIHJvbGU9ImltZyI+PHBhdGggZD0iTTIwIDVDMjAgNC40IDE5LjYgNCAxOSA0SDEzQzEyLjQgNCAxMiAzLjYgMTIgM0MxMiAyLjQgMTIuNCAyIDEzIDJIMjFDMjEuNiAyIDIyIDIuNCAyMiAzVjExQzIyIDExLjYgMjEuNiAxMiAyMSAxMkMyMC40IDEyIDIwIDExLjYgMjAgMTFWNVpNNCAxOUM0IDE5LjYgNC40IDIwIDUgMjBIMTFDMTEuNiAyMCAxMiAyMC40IDEyIDIxQzEyIDIxLjYgMTEuNiAyMiAxMSAyMkgzQzIuNCAyMiAyIDIxLjYgMiAyMVYxM0MyIDEyLjQgMi40IDEyIDMgMTJDMy42IDEyIDQgMTIuNCA0IDEzVjE5WiIgLz48L3N2Zz4=)
+
+## Example
+
+This is a basic example which shows you how to solve a common problem:
+
+``` r
+
+library(shiny)
+library(shiny386)
+ui <- page_386(
+ card_386(
+  title = "My card",
+  "This is my card",
+  br(),
+  card_link_386(href = "https://www.google.com", "More"),
+  footer = "Card footer"
+ )
+)
+
+server <- function(input, output, session) {}
+shinyApp(ui, server)
+```
+
+# Package index
+
+## All functions
+
+- [`badge_386()`](https://rinterface.github.io/shiny386/reference/badge_386.md)
+  : Create a Bootstrap 386 badge
+- [`button_386()`](https://rinterface.github.io/shiny386/reference/button_386.md)
+  : Bootstrap 386 action button
+- [`card_386()`](https://rinterface.github.io/shiny386/reference/card.md)
+  [`card_title_386()`](https://rinterface.github.io/shiny386/reference/card.md)
+  [`card_subtitle_386()`](https://rinterface.github.io/shiny386/reference/card.md)
+  [`card_link_386()`](https://rinterface.github.io/shiny386/reference/card.md)
+  : Create a Bootstrap 386 card
+- [`checkbox_group_input_386()`](https://rinterface.github.io/shiny386/reference/checkbox_group_input_386.md)
+  : Create a Bootstrap 386 checkbox group input
+- [`checkbox_input_386()`](https://rinterface.github.io/shiny386/reference/checkbox_input_386.md)
+  : Create a Bootstrap 386 checkbox
+- [`create_checkbox_tag()`](https://rinterface.github.io/shiny386/reference/create_checkbox_tag.md)
+  : Create checkbox/switch input based on the selected type
+- [`dropdown_386()`](https://rinterface.github.io/shiny386/reference/dropdown.md)
+  [`open_dropdown_386()`](https://rinterface.github.io/shiny386/reference/dropdown.md)
+  [`dropdown_item_386()`](https://rinterface.github.io/shiny386/reference/dropdown.md)
+  : Create a Bootstrap 386 dropdown container for buttons/links
+- [`jumbotron_386()`](https://rinterface.github.io/shiny386/reference/jumbotron_386.md)
+  : Create a Bootstrap 386 Jumbotron
+- [`list_group_386()`](https://rinterface.github.io/shiny386/reference/list_group_386.md)
+  : Create a Bootstrap 386 list group container
+- [`list_group_item_386()`](https://rinterface.github.io/shiny386/reference/list_group_item_386.md)
+  : Create a Bootstrap 386 list group item
+- [`modal_386()`](https://rinterface.github.io/shiny386/reference/modal.md)
+  [`show_modal_386()`](https://rinterface.github.io/shiny386/reference/modal.md)
+  [`remove_modal_386()`](https://rinterface.github.io/shiny386/reference/modal.md)
+  : Create a Bootstrap 386 modal
+- [`navbar_page_386()`](https://rinterface.github.io/shiny386/reference/navbar.md)
+  [`navbar_menu_386()`](https://rinterface.github.io/shiny386/reference/navbar.md)
+  [`update_navbar_page_386()`](https://rinterface.github.io/shiny386/reference/navbar.md)
+  : Create a Bootstrap 386 navbar page
+- [`page_386()`](https://rinterface.github.io/shiny386/reference/page_386.md)
+  : Create Bootstrap 386 page skeleton
+- [`progress_386()`](https://rinterface.github.io/shiny386/reference/progress_386.md)
+  : Create a Bootstrap 386 progress bar
+- [`radio_input_386()`](https://rinterface.github.io/shiny386/reference/radio_input_386.md)
+  : Create a Bootstrap 386 radio buttons
+- [`select_input_386()`](https://rinterface.github.io/shiny386/reference/select_input_386.md)
+  : Create a Bootstrap 386 select input
+- [`shiny386-package`](https://rinterface.github.io/shiny386/reference/shiny386.md)
+  [`shiny386`](https://rinterface.github.io/shiny386/reference/shiny386.md)
+  : shiny386
+- [`show_toast_386()`](https://rinterface.github.io/shiny386/reference/show_toast_386.md)
+  : Show a Bootstrap 386 toast on the client
+- [`tab_panel_386()`](https://rinterface.github.io/shiny386/reference/tab_panel_386.md)
+  : Create a Bootstrap 386 tab panel
+- [`tabset_panel_386()`](https://rinterface.github.io/shiny386/reference/tabset_panel_386.md)
+  : Create a Bootstrap 386 tabset panel
+- [`text_area_input_386()`](https://rinterface.github.io/shiny386/reference/text_area_input_386.md)
+  : Create a Bootstrap 386 text area input
+- [`text_input_386()`](https://rinterface.github.io/shiny386/reference/text_input_386.md)
+  : Create a Bootstrap 386 text input
+- [`toast_386()`](https://rinterface.github.io/shiny386/reference/toast_386.md)
+  : Create a Bootstrap 386 toast
+- [`toggle_input_386()`](https://rinterface.github.io/shiny386/reference/toggle_input_386.md)
+  : Custom Bootstrap 386 switch input
+- [`update_checkbox_group_input_386()`](https://rinterface.github.io/shiny386/reference/update_checkbox_group_input_386.md)
+  : Change the value of a checkbox group input on the client
+- [`update_checkbox_input_386()`](https://rinterface.github.io/shiny386/reference/update_checkbox_input_386.md)
+  : Update checkbox_input_386 on the client
+- [`update_progress_386()`](https://rinterface.github.io/shiny386/reference/update_progress_386.md)
+  : Update a progress_386 on the client
+- [`update_radio_input_386()`](https://rinterface.github.io/shiny386/reference/update_radio_input_386.md)
+  : Change the value of a radio input on the client
+- [`update_select_input_386()`](https://rinterface.github.io/shiny386/reference/update_select_input_386.md)
+  : Update a Bootstrap 386 select input on the client
+- [`update_tabset_panel_386()`](https://rinterface.github.io/shiny386/reference/update_tabset_panel_386.md)
+  : Update a Bootstrap 386 tabset panel on the client
+- [`update_text_area_input_386()`](https://rinterface.github.io/shiny386/reference/update_text_area_input_386.md)
+  : Update a Bootstrap 386 text area input on the client
+- [`update_text_input_386()`](https://rinterface.github.io/shiny386/reference/update_text_input_386.md)
+  : Update a Bootstrap 386 text input on the client
+- [`update_toggle_input_386()`](https://rinterface.github.io/shiny386/reference/update_toggle_input_386.md)
+  : Update toggle_input_386 on the client
+- [`use_bs4_deps()`](https://rinterface.github.io/shiny386/reference/use_bs4_deps.md)
+  : Create shiny386 dependencies
+- [`validate_progress_value()`](https://rinterface.github.io/shiny386/reference/validate_progress_value.md)
+  : Validate a progress_386 value
+- [`validate_status()`](https://rinterface.github.io/shiny386/reference/validate_status.md)
+  : Validation function
+

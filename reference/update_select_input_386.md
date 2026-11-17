@@ -1,0 +1,52 @@
+# Update a Bootstrap 386 select input on the client
+
+Update a Bootstrap 386 select input on the client
+
+## Usage
+
+``` r
+update_select_input_386(...)
+```
+
+## Arguments
+
+- ...:
+
+  Passed to
+  [`shiny::updateSelectInput()`](https://rdrr.io/pkg/shiny/man/updateSelectInput.html).
+
+## Examples
+
+``` r
+if (interactive()) {
+ library(shiny)
+ library(shiny386)
+
+ ui <- page_386(
+  p("The radio group controls the select input"),
+  radio_input_386("inCheckboxGroup", "Input checkbox",
+                     c("Item A", "Item B", "Item C")),
+  select_input_386("inSelect", "Select input",
+             c("Item A", "Item B", "Item C"))
+ )
+
+ server <- function(input, output, session) {
+   observe({
+     x <- input$inCheckboxGroup
+
+     # Can use character(0) to remove all choices
+     if (is.null(x))
+       x <- character(0)
+
+     # Can also set the label and select items
+     update_select_input_386(session, "inSelect",
+                       label = paste("Select input label", length(x)),
+                       choices = x,
+                       selected = tail(x, 1)
+     )
+   })
+ }
+
+ shinyApp(ui, server)
+}
+```
