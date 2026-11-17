@@ -72,15 +72,23 @@ tabset_panel_386 <- function(..., id = NULL, selected = NULL,
     position = position
   )
 
+  # Like shiny, default to the first tab when nothing is selected
+  if (is.null(selected)) {
+    tabs <- htmltools::tagQuery(temp_tabset)$
+      find("a")$
+      filter(function(x, i) identical(x$attribs$`data-toggle`, "tab"))$
+      selectedTags()
+    if (length(tabs)) selected <- tabs[[1]]$attribs$`data-value`
+  }
+
   # Some edit below since Bootstrap 4 significantly changed the layout
   htmltools::tagQuery(temp_tabset)$
     find("li")$
     each(
       function(x, i) {
-        # replace text
         current_tab <- x$children[[1]]$attribs$`data-value`
         x$attribs$class <- "nav-item"
-        x$children[[1]]$attribs$class <- if (selected == current_tab) {
+        x$children[[1]]$attribs$class <- if (identical(selected, current_tab)) {
           "nav-link active"
         } else {
           "nav-link"
@@ -93,13 +101,13 @@ tabset_panel_386 <- function(..., id = NULL, selected = NULL,
 
 
 #' Create a Bootstrap 386 tab panel
-#' @inheritParams shiny::tabPanel
+#' @param ... Passed to [shiny::tabPanel()].
 #' @export
-tab_panel_386 <- shiny::tabPanel
+tab_panel_386 <- function(...) shiny::tabPanel(...)
 
 
 #' Update a Bootstrap 386 tabset panel on the client
-#' @inheritParams shiny::updateTabsetPanel
+#' @param ... Passed to [shiny::updateTabsetPanel()].
 #' @export
 #' @examples
 #' if (interactive()) {
@@ -129,13 +137,17 @@ tab_panel_386 <- shiny::tabPanel
 #'
 #'  shinyApp(ui, server)
 #' }
-update_tabset_panel_386 <- shiny::updateTabsetPanel
+update_tabset_panel_386 <- function(...) shiny::updateTabsetPanel(...)
 
 
 
 #' Create a Bootstrap 386 navbar page
 #'
 #' @inheritParams shiny::navbarPage
+#' @param ... For `navbar_page_386()`, [tab_panel_386()] and
+#'   `navbar_menu_386()` elements. For `navbar_menu_386()` and
+#'   `update_navbar_page_386()`, passed to [shiny::navbarMenu()] and
+#'   [shiny::updateNavbarPage()] respectively.
 #'
 #' @return A shiny tag
 #' @export
@@ -295,15 +307,13 @@ navbar_page_386 <- function (title, ..., id = NULL, selected = NULL,
 
 
 #' Create a Bootstrap 386 navbar menu
-#' @inheritParams shiny::navbarMenu
 #' @export
 #' @rdname navbar
-navbar_menu_386 <- shiny::navbarMenu
+navbar_menu_386 <- function(...) shiny::navbarMenu(...)
 
 
 
 #' Update a Bootstrap 386 navbar on the client
-#' @inheritParams shiny::updateNavbarPage
 #' @export
 #' @rdname navbar
 #' @examples
@@ -343,4 +353,4 @@ navbar_menu_386 <- shiny::navbarMenu
 #'  shinyApp(ui, server)
 #'
 #' }
-update_navbar_page_386 <- shiny::updateNavbarPage
+update_navbar_page_386 <- function(...) shiny::updateNavbarPage(...)

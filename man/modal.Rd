@@ -6,45 +6,15 @@
 \alias{remove_modal_386}
 \title{Create a Bootstrap 386 modal}
 \usage{
-modal_386(
-  ...,
-  title = NULL,
-  footer = modalButton("Dismiss"),
-  size = c("m", "s", "l", "xl"),
-  easyClose = FALSE,
-  fade = TRUE
-)
+modal_386(...)
 
-show_modal_386(ui, session = getDefaultReactiveDomain())
+show_modal_386(...)
 
-remove_modal_386(session = getDefaultReactiveDomain())
+remove_modal_386(...)
 }
 \arguments{
-\item{...}{UI elements for the body of the modal dialog box.}
-
-\item{title}{An optional title for the dialog.}
-
-\item{footer}{UI for footer. Use \code{NULL} for no footer.}
-
-\item{size}{One of \code{"s"} for small, \code{"m"} (the default) for medium,
-\code{"l"} for large, or \code{"xl"} for extra large. Note that \code{"xl"} only
-works with Bootstrap 4 and above (to opt-in to Bootstrap 4+,
-pass \code{\link[bslib:bs_theme]{bslib::bs_theme()}} to the \code{theme} argument of a page container
-like \code{\link[shiny:fluidPage]{fluidPage()}}).}
-
-\item{easyClose}{If \code{TRUE}, the modal dialog can be dismissed by
-clicking outside the dialog box, or be pressing the Escape key. If
-\code{FALSE} (the default), the modal dialog can't be dismissed in those
-ways; instead it must be dismissed by clicking on a \code{modalButton()}, or
-from a call to \code{\link[shiny:removeModal]{removeModal()}} on the server.}
-
-\item{fade}{If \code{FALSE}, the modal dialog will have no fade-in animation
-(it will simply appear rather than fade in to view).}
-
-\item{ui}{UI content to show in the modal.}
-
-\item{session}{The \code{session} object passed to function given to
-\code{shinyServer}.}
+\item{...}{Passed to \code{\link[shiny:modalDialog]{shiny::modalDialog()}}, \code{\link[shiny:showModal]{shiny::showModal()}} or
+\code{\link[shiny:removeModal]{shiny::removeModal()}}.}
 }
 \description{
 Create a Bootstrap 386 modal

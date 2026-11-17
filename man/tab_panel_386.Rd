@@ -4,19 +4,10 @@
 \alias{tab_panel_386}
 \title{Create a Bootstrap 386 tab panel}
 \usage{
-tab_panel_386(title, ..., value = title, icon = NULL)
+tab_panel_386(...)
 }
 \arguments{
-\item{title}{Display title for tab}
-
-\item{...}{UI elements to include within the tab}
-
-\item{value}{The value that should be sent when \code{tabsetPanel} reports
-that this tab is selected. If omitted and \code{tabsetPanel} has an
-\code{id}, then the title will be used.}
-
-\item{icon}{Optional icon to appear on the tab. This attribute is only
-valid when using a \code{tabPanel} within a \code{\link[shiny:navbarPage]{navbarPage()}}.}
+\item{...}{Passed to \code{\link[shiny:tabPanel]{shiny::tabPanel()}}.}
 }
 \description{
 Create a Bootstrap 386 tab panel

@@ -209,7 +209,7 @@ dropdown_item_386 <- function(inputId = NULL, href = NULL, label) {
 
 
 #' Create a Bootstrap 386 text input
-#' @inheritParams shiny::textInput
+#' @param ... Passed to [shiny::textInput()].
 #' @export
 #' @examples
 #' if (interactive()) {
@@ -227,18 +227,18 @@ dropdown_item_386 <- function(inputId = NULL, href = NULL, label) {
 #'  shinyApp(ui, server)
 #'
 #' }
-text_input_386 <- shiny::textInput
+text_input_386 <- function(...) shiny::textInput(...)
 
 
 
 #' Update a Bootstrap 386 text input on the client
-#' @inheritParams shiny::updateTextInput
+#' @param ... Passed to [shiny::updateTextInput()].
 #' @export
-update_text_input_386 <- shiny::updateTextInput
+update_text_input_386 <- function(...) shiny::updateTextInput(...)
 
 
 #' Create a Bootstrap 386 text area input
-#' @inheritParams shiny::textAreaInput
+#' @param ... Passed to [shiny::textAreaInput()].
 #' @export
 #' @examples
 #' if (interactive()) {
@@ -256,15 +256,15 @@ update_text_input_386 <- shiny::updateTextInput
 #'  shinyApp(ui, server)
 #'
 #' }
-text_area_input_386 <- shiny::textAreaInput
+text_area_input_386 <- function(...) shiny::textAreaInput(...)
 
 
 
 
 #' Update a Bootstrap 386 text area input on the client
-#' @inheritParams shiny::updateTextAreaInput
+#' @param ... Passed to [shiny::updateTextAreaInput()].
 #' @export
-update_text_area_input_386 <- shiny::updateTextAreaInput
+update_text_area_input_386 <- function(...) shiny::updateTextAreaInput(...)
 
 
 
@@ -656,7 +656,7 @@ select_input_386 <- function(
 
 
 #' Update a Bootstrap 386 select input on the client
-#' @inheritParams shiny::updateSelectInput
+#' @param ... Passed to [shiny::updateSelectInput()].
 #' @export
 #' @examples
 #' if (interactive()) {
@@ -690,4 +690,4 @@ select_input_386 <- function(
 #'
 #'  shinyApp(ui, server)
 #' }
-update_select_input_386 <- shiny::updateSelectInput
+update_select_input_386 <- function(...) shiny::updateSelectInput(...)

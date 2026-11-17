@@ -20,4 +20,9 @@ Useful links:
 \author{
 \strong{Maintainer}: David Granjon \email{dgranjon@ymail.com}
 
+Authors:
+\itemize{
+  \item David Granjon \email{dgranjon@ymail.com}
+}
+
 }

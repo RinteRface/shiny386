@@ -4,21 +4,10 @@
 \alias{text_input_386}
 \title{Create a Bootstrap 386 text input}
 \usage{
-text_input_386(inputId, label, value = "", width = NULL, placeholder = NULL)
+text_input_386(...)
 }
 \arguments{
-\item{inputId}{The \code{input} slot that will be used to access the value.}
-
-\item{label}{Display label for the control, or \code{NULL} for no label.}
-
-\item{value}{Initial value.}
-
-\item{width}{The width of the input, e.g. \code{'400px'}, or \code{'100\%'};
-see \code{\link[shiny:validateCssUnit]{validateCssUnit()}}.}
-
-\item{placeholder}{A character string giving the user a hint as to what can
-be entered into the control. Internet Explorer 8 and 9 do not support this
-option.}
+\item{...}{Passed to \code{\link[shiny:textInput]{shiny::textInput()}}.}
 }
 \description{
 Create a Bootstrap 386 text input

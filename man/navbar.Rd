@@ -18,21 +18,17 @@ navbar_page_386(
   windowTitle = title
 )
 
-navbar_menu_386(title, ..., menuName = title, icon = NULL)
+navbar_menu_386(...)
 
-update_navbar_page_386(
-  session = getDefaultReactiveDomain(),
-  inputId,
-  selected = NULL
-)
+update_navbar_page_386(...)
 }
 \arguments{
 \item{title}{The title to display in the navbar}
 
-\item{...}{\code{\link[shiny:tabPanel]{tabPanel()}} elements to include in the page. The
-\code{navbarMenu} function also accepts strings, which will be used as menu
-section headers. If the string is a set of dashes like \code{"----"} a
-horizontal separator will be displayed in the menu.}
+\item{...}{For \code{navbar_page_386()}, \code{\link[=tab_panel_386]{tab_panel_386()}} and
+\code{navbar_menu_386()} elements. For \code{navbar_menu_386()} and
+\code{update_navbar_page_386()}, passed to \code{\link[shiny:navbarMenu]{shiny::navbarMenu()}} and
+\code{\link[shiny:updateNavbarPage]{shiny::updateNavbarPage()}} respectively.}
 
 \item{id}{If provided, you can use \verb{input$}\emph{\code{id}} in your
 server logic to determine which of the current tabs is active. The value
@@ -49,7 +45,7 @@ the top (\code{"fixed-top"}), or pinned at the bottom
 (\code{"fixed-bottom"}). Note that using \code{"fixed-top"} or
 \code{"fixed-bottom"} will cause the navbar to overlay your body content,
 unless you add padding, e.g.: \code{tags$style(type="text/css", "body
-  {padding-top: 70px;}")}}
+{padding-top: 70px;}")}}
 
 \item{header}{Tag or list of tags to display as a common header above all
 tabPanels.}
@@ -64,18 +60,6 @@ navigation bar}
 default value, \code{NA}, means to use any character strings that appear in
 \code{title} (if none are found, the host URL of the page is displayed by
 default).}
-
-\item{menuName}{A name that identifies this \code{navbarMenu}. This
-is needed if you want to insert/remove or show/hide an entire
-\code{navbarMenu}.}
-
-\item{icon}{Optional icon to appear on a \code{navbarMenu} tab.}
-
-\item{session}{The \code{session} object passed to function given to
-\code{shinyServer}. Default is \code{getDefaultReactiveDomain()}.}
-
-\item{inputId}{The id of the \code{tabsetPanel}, \code{navlistPanel},
-or \code{navbarPage} object.}
 }
 \value{
 A shiny tag

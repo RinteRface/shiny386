@@ -105,7 +105,8 @@ show_toast_386 <- function(id, options = NULL, session = getDefaultReactiveDomai
 
 
 #' Create a Bootstrap 386 modal
-#' @inheritParams shiny::modalDialog
+#' @param ... Passed to [shiny::modalDialog()], [shiny::showModal()] or
+#'   [shiny::removeModal()].
 #' @export
 #' @rdname modal
 #' @examples
@@ -171,19 +172,17 @@ show_toast_386 <- function(id, options = NULL, session = getDefaultReactiveDomai
 #'   }
 #'  )
 #' }
-modal_386 <- shiny::modalDialog
+modal_386 <- function(...) shiny::modalDialog(...)
 
 #' Show a Bootstrap 386 modal
-#' @inheritParams shiny::showModal
 #' @export
 #' @rdname modal
-show_modal_386 <- shiny::showModal
+show_modal_386 <- function(...) shiny::showModal(...)
 
 
 
 #' Hide a Bootstrap 386 modal
-#' @inheritParams shiny::removeModal
 #' @export
 #' @rdname modal
-remove_modal_386 <- shiny::removeModal
+remove_modal_386 <- function(...) shiny::removeModal(...)
 

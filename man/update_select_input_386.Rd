@@ -4,32 +4,10 @@
 \alias{update_select_input_386}
 \title{Update a Bootstrap 386 select input on the client}
 \usage{
-update_select_input_386(
-  session = getDefaultReactiveDomain(),
-  inputId,
-  label = NULL,
-  choices = NULL,
-  selected = NULL
-)
+update_select_input_386(...)
 }
 \arguments{
-\item{session}{The \code{session} object passed to function given to
-\code{shinyServer}. Default is \code{getDefaultReactiveDomain()}.}
-
-\item{inputId}{The id of the input object.}
-
-\item{label}{The label to set for the input object.}
-
-\item{choices}{List of values to select from. If elements of the list are
-named, then that name --- rather than the value --- is displayed to the
-user. It's also possible to group related inputs by providing a named list
-whose elements are (either named or unnamed) lists, vectors, or factors. In
-this case, the outermost names will be used as the group labels (leveraging
-the \verb{<optgroup>} HTML tag) for the elements in the respective sublist. See
-the example section for a small demo of this feature.}
-
-\item{selected}{The initially selected value (or multiple values if \code{multiple = TRUE}). If not specified then defaults to the first value for
-single-select lists and no values for multiple select lists.}
+\item{...}{Passed to \code{\link[shiny:updateSelectInput]{shiny::updateSelectInput()}}.}
 }
 \description{
 Update a Bootstrap 386 select input on the client
